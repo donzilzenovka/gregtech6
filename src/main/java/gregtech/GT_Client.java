@@ -20,12 +20,14 @@
 package gregtech;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import gregapi.GT_API;
 import gregapi.api.Abstract_Mod;
+import gregapi.audio.GTSoundHandler;
 import gregapi.config.ConfigCategories;
 import gregapi.data.LH;
 import gregapi.data.MD;
@@ -34,6 +36,7 @@ import gregtech.entities.projectiles.EntityArrow_Potion;
 import gregtech.render.GT_Renderer_Entity_Arrow;
 import gregtech.render.PlayerModelRenderer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,6 +46,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import org.lwjgl.opengl.GL11;
+
+import java.lang.reflect.Field;
 
 import static gregapi.data.CS.*;
 
@@ -58,6 +63,12 @@ public class GT_Client extends GT_Proxy {
 		super.onProxyAfterPreInit(aMod, aEvent);
 		new GT_Renderer_Entity_Arrow(EntityArrow_Material.class, "arrow");
 		new GT_Renderer_Entity_Arrow(EntityArrow_Potion.class, "arrow_potions");
+
+	}
+
+	@Override
+	public void onProxyAfterPostInit(Abstract_Mod aMod, FMLPostInitializationEvent aEvent) {
+		injectSoundHandler();
 	}
 	
 	private boolean FIRST_CLIENT_PLAYER_TICK = T;
@@ -158,6 +169,32 @@ public class GT_Client extends GT_Proxy {
 	@SubscribeEvent
 	public void receiveRenderSpecialsEvent(RenderPlayerEvent.Specials.Pre aEvent) {
 		mPlayerRenderer.receiveRenderSpecialsEvent(aEvent);
+	}
+
+	public static void injectSoundHandler() {
+		try {
+			Minecraft mc = Minecraft.getMinecraft();
+
+			// Grab the existing SoundHandler
+			Field field = Minecraft.class.getDeclaredField("mcSoundHandler");
+			field.setAccessible(true);
+			SoundHandler original = (SoundHandler) field.get(mc);
+
+			// Create the ONE and ONLY GTSoundHandler instance
+			GTSoundHandler wrapped = new GTSoundHandler(original);
+
+			// Inject this instance into the Minecraft field
+			field.set(mc, wrapped);
+
+			// Create and REGISTER the DEDICATED Tick Handler, passing the INJECTED 'wrapped' instance.
+			// GTSoundTickHandler tickHandler = new GTSoundTickHandler(wrapped); // <-- CORRECTED LINE
+			// MinecraftForge.EVENT_BUS.register(tickHandler);
+			// FMLCommonHandler.instance().bus().register(tickHandler);
+
+			GT6_Main.LOG.info("[GT6] Injected custom SoundHandler successfully.");
+		} catch (Exception e) {
+			GT6_Main.LOG.error("[GT6] Failed to inject SoundHandler", e);
+		}
 	}
 	/*
 	@Override
