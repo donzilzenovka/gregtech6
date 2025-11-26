@@ -17,10 +17,24 @@ public class GTSoundHandler extends SoundHandler {
 
     public GTSoundHandler(SoundHandler originalHandler) {
         super(getResourceManager(originalHandler), getGameSettings(originalHandler));
+
+        SoundManager originalManager = ReflectionHelper
+                .getPrivateValue(SoundHandler.class, originalHandler, "sndManager", "field147694_f");
+
+        if(originalManager == null) {
+            GT6_Main.LOG.error("CRITICAL FAILURE: Original SoundManager reflection returned null. Sounds will not play.");
+            return;
+        }
+
+        try{
+            ReflectionHelper.setPrivateValue(SoundHandler.class, this, originalManager, "sndManager", "field_147694_f");
+            GT6_Main.LOG.info("SoundManager substitution successful. Audio Delegation active.");
+        } catch (Exception e){
+            GT6_Main.LOG.error("CRITICAL FAILURE: Could not inject original SoundManager.", e);
+        }
     }
 
     private static IResourceManager getResourceManager(SoundHandler handler) {
-        // Names: "mcResourceManager" (MCP), "field_147695_g" (SRG)
         IResourceManager mgr = ReflectionHelper
                 .getPrivateValue(SoundHandler.class, handler, "mcResourceManager", "field_147695_g");
         if (mgr == null) {
@@ -30,14 +44,12 @@ public class GTSoundHandler extends SoundHandler {
     }
 
     private static GameSettings getGameSettings(SoundHandler handler) {
-        // 1. Get SoundManager from SoundHandler (Names: "sndManager", "field_147694_f")
         SoundManager sndManager = ReflectionHelper
                 .getPrivateValue(SoundHandler.class, handler, "sndManager", "field_147694_f");
         if (sndManager == null) {
             throw new IllegalStateException("Failed to get SoundManager from SoundHandler (required for GameSettings lookup)");
         }
 
-        // 2. Get GameSettings from SoundManager (Names: "options", "field_78903_e")
         GameSettings settings = ReflectionHelper
                 .getPrivateValue(SoundManager.class, sndManager, "options", "field_78903_e");
         if (settings == null) {
@@ -49,6 +61,11 @@ public class GTSoundHandler extends SoundHandler {
     @Override
     public void playSound(ISound sound) {
         // Logging
+        writeLog(sound);
+        super.playSound(sound);
+    }
+
+    public void writeLog(ISound sound){
         final Minecraft mc = Minecraft.getMinecraft();
         ResourceLocation soundLocation = sound.getPositionedSoundLocation();
         String logMessage = "[GT6] Sound: " + soundLocation.getResourcePath();
@@ -67,5 +84,4 @@ public class GTSoundHandler extends SoundHandler {
             GT6_Main.LOG.info(logMessage);
         }
     }
-
 }
