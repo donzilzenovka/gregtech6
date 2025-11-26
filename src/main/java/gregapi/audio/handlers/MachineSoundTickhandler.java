@@ -55,10 +55,10 @@ public class MachineSoundTickhandler {
 
     private SoundLoop createSoundForMachine(TileEntity te){
         //Example: select sound key base on machine type/state
-        String soundKey = "gregtech:running.ogg";
+        String soundKey = "gregtech:running";
         SoundLoop sound = new SoundLoop(soundKey, te);
-        sound.setSoundVolume(sound, 0.45f);
-        sound.setSoundPitch(sound, 0.5f);
+        sound.setVolume(0.45f);
+        sound.setPitch(0.5f);
         return sound;
     }
 

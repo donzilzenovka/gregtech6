@@ -24,6 +24,7 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -31,6 +32,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregapi.api.Abstract_Mod;
 import gregapi.audio.handlers.GTSoundHandler;
+import gregapi.audio.handlers.GTSoundTickHandler;
 import gregapi.block.IBlockBase;
 import gregapi.block.ToolCompat;
 import gregapi.block.metatype.BlockMetaType;
@@ -71,6 +73,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -652,9 +655,9 @@ public class GT_API_Proxy_Client extends GT_API_Proxy {
             field.set(mc, wrapped);
 
             // Create and REGISTER the DEDICATED Tick Handler, passing the INJECTED 'wrapped' instance.
-            // GTSoundTickHandler tickHandler = new GTSoundTickHandler(wrapped);
-            // MinecraftForge.EVENT_BUS.register(tickHandler);
-            // FMLCommonHandler.instance().bus().register(tickHandler);
+            GTSoundTickHandler tickHandler = new GTSoundTickHandler(wrapped);
+            MinecraftForge.EVENT_BUS.register(tickHandler);
+			FMLCommonHandler.instance().bus().register(tickHandler);
 
             OUT.println("GT_Mod: Injected custom SoundHandler successfully.");
         } catch (Exception e) {

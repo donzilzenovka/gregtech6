@@ -2,5 +2,8 @@
 "gt.screwdriver":{"category":"player", "sounds":[{"name":"screwdriver", "stream":false}]},
 "gt.wrench":{"category":"player", "sounds":[{"name":"wrench", "stream":false}]},
 "gt.beep":{"category":"player", "sounds":[{"name":"beep", "stream":false}]},
-"gt.running": {"category":"ambient", "sounds":[{"name": "running", "stream":false}]}
+"gt.engine_idle": {"category":"ambient", "sounds":[{"name": "engine_idle", "stream":false}]},
+  "gt.engine_active": {"category":"ambient", "sounds":[{"name": "engine_active", "stream":false}]},
+  "gt.engine_stall": {"category":"ambient", "sounds":[{"name": "engine_stall", "stream":false}]}
+
 }
