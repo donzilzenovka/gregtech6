@@ -30,6 +30,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregapi.api.Abstract_Mod;
+import gregapi.audio.handlers.GTSoundHandler;
 import gregapi.block.IBlockBase;
 import gregapi.block.ToolCompat;
 import gregapi.block.metatype.BlockMetaType;
@@ -55,8 +56,10 @@ import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import gregapi.util.WD;
+import gregtech.GT6_Main;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.renderer.entity.RenderFallingBlock;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
@@ -73,6 +76,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -187,6 +191,7 @@ public class GT_API_Proxy_Client extends GT_API_Proxy {
 			Block tBlock = ST.block(PlankData.PLANKS[i]);
 			if (tBlock != null && tBlock != NB) PlankData.PLANK_ICONS[i] = new IconContainerCopied(tBlock, ST.meta_(PlankData.PLANKS[i]), SIDE_ANY);
 		}
+        injectSoundHandler();
 	}
 	
 	public static final List<short[]> sRainbow = new ArrayListNoNulls<>(), sRainbowFast = new ArrayListNoNulls<>(), sPosR = new ArrayListNoNulls<>(), sPosG = new ArrayListNoNulls<>(), sPosB = new ArrayListNoNulls<>(), sPosA = new ArrayListNoNulls<>(), sNegR = new ArrayListNoNulls<>(), sNegG = new ArrayListNoNulls<>(), sNegB = new ArrayListNoNulls<>(), sNegA = new ArrayListNoNulls<>();
@@ -636,4 +641,25 @@ public class GT_API_Proxy_Client extends GT_API_Proxy {
 	}
 	
 	private static List<Block> ROTATABLE_VANILLA_BLOCKS = Arrays.asList(Blocks.piston, Blocks.sticky_piston, Blocks.furnace, Blocks.lit_furnace, Blocks.dropper, Blocks.dispenser, Blocks.chest, Blocks.trapped_chest, Blocks.ender_chest, Blocks.hopper, Blocks.pumpkin, Blocks.lit_pumpkin);
+
+    public static void injectSoundHandler() {
+        try {
+            Minecraft mc = Minecraft.getMinecraft();
+
+            Field field = Minecraft.class.getDeclaredField("mcSoundHandler");
+            field.setAccessible(true);
+            SoundHandler original = (SoundHandler) field.get(mc);
+            GTSoundHandler wrapped = new GTSoundHandler(original);
+            field.set(mc, wrapped);
+
+            // Create and REGISTER the DEDICATED Tick Handler, passing the INJECTED 'wrapped' instance.
+            // GTSoundTickHandler tickHandler = new GTSoundTickHandler(wrapped);
+            // MinecraftForge.EVENT_BUS.register(tickHandler);
+            // FMLCommonHandler.instance().bus().register(tickHandler);
+
+            GT6_Main.LOG.info("[GT6] Injected custom SoundHandler successfully.");
+        } catch (Exception e) {
+            GT6_Main.LOG.error("[GT6] Failed to inject SoundHandler", e);
+        }
+    }
 }

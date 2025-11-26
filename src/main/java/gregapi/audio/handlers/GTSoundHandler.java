@@ -1,4 +1,4 @@
-package gregapi.audio;
+package gregapi.audio.handlers;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import gregtech.GT6_Main;
