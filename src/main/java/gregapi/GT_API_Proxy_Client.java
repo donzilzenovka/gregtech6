@@ -56,7 +56,6 @@ import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import gregapi.util.WD;
-import gregtech.GT6_Main;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
@@ -657,9 +656,9 @@ public class GT_API_Proxy_Client extends GT_API_Proxy {
             // MinecraftForge.EVENT_BUS.register(tickHandler);
             // FMLCommonHandler.instance().bus().register(tickHandler);
 
-            GT6_Main.LOG.info("[GT6] Injected custom SoundHandler successfully.");
+            OUT.println("GT_Mod: Injected custom SoundHandler successfully.");
         } catch (Exception e) {
-            GT6_Main.LOG.error("[GT6] Failed to inject SoundHandler", e);
+            ERR.println("GT_Mod: Failed to inject SoundHandler");
         }
     }
 }

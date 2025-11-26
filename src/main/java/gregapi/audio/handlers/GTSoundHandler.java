@@ -1,7 +1,6 @@
 package gregapi.audio.handlers;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
-import gregtech.GT6_Main;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSound;
@@ -10,6 +9,8 @@ import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
+
+import static gregapi.data.CS.*;
 
 
 public class GTSoundHandler extends SoundHandler {
@@ -22,15 +23,15 @@ public class GTSoundHandler extends SoundHandler {
                 .getPrivateValue(SoundHandler.class, originalHandler, "sndManager", "field147694_f");
 
         if(originalManager == null) {
-            GT6_Main.LOG.error("CRITICAL FAILURE: Original SoundManager reflection returned null. Sounds will not play.");
+            ERR.println("GT_Mod: CRITICAL FAILURE: Original SoundManager reflection returned null. Sounds will not play.");
             return;
         }
 
         try{
             ReflectionHelper.setPrivateValue(SoundHandler.class, this, originalManager, "sndManager", "field_147694_f");
-            GT6_Main.LOG.info("SoundManager substitution successful. Audio Delegation active.");
+            OUT.println("GT_Mod: SoundManager substitution successful. Audio Delegation active.");
         } catch (Exception e){
-            GT6_Main.LOG.error("CRITICAL FAILURE: Could not inject original SoundManager.", e);
+            ERR.println("GT_Mod: CRITICAL FAILURE: Could not inject original SoundManager.");
         }
     }
 
@@ -68,7 +69,7 @@ public class GTSoundHandler extends SoundHandler {
     public void writeLog(ISound sound){
         final Minecraft mc = Minecraft.getMinecraft();
         ResourceLocation soundLocation = sound.getPositionedSoundLocation();
-        String logMessage = "[GT6] Sound: " + soundLocation.getResourcePath();
+        String logMessage = "GT_Mod: Sound: " + soundLocation.getResourcePath();
         if (mc.thePlayer != null && sound instanceof PositionedSound) {
             PositionedSound ps = (PositionedSound) sound;
             logMessage += String.format(
@@ -81,7 +82,8 @@ public class GTSoundHandler extends SoundHandler {
             );
         }
         if (logDebug){
-            GT6_Main.LOG.info(logMessage);
+            DEB.println(logMessage);
+            System.out.println(logMessage);
         }
     }
 }
