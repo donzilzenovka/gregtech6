@@ -3,23 +3,26 @@ package gregapi.audio.handlers;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import gregapi.audio.SoundLoop;
-import gregtech.tileentity.energy.generators.MultiTileEntityMotorLiquid;
-import li.cil.oc.client.Sound;
+import gregapi.tileentity.machines.MultiTileEntityBasicMachine;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class GTSoundTickHandler {
 
-    //private final GTSoundHandler soundHandler;
     private final Minecraft mc = Minecraft.getMinecraft();
 
     private final Map<TileEntity, SoundLoop> activeSounds = new HashMap<>();
+
+    private static final Map<String, String[]> MACHINE_SOUND_MAP = new HashMap<>();
+
+    static {
+        MACHINE_SOUND_MAP.put("cokeoven", new String[] { null, null, null, "burning_internal"});
+        MACHINE_SOUND_MAP.put("centrifuge", new String[] {null, null, "spin_idle", "spin_processing"});
+    }
 
     private static final String SOUND_ACTIVE = "gregapi:gt.engine_active";
     private static final String SOUND_STALL = "gregapi:gt.engine_stall";
@@ -30,34 +33,50 @@ public class GTSoundTickHandler {
 
         // Loop
         for (Object o : mc.theWorld.loadedTileEntityList) {
-            if ((o instanceof MultiTileEntityMotorLiquid)) {
-                MultiTileEntityMotorLiquid engine = (MultiTileEntityMotorLiquid) o;
-                System.out.println("Coord: " + engine.getX() + ", " + engine.getY() + ", " + engine.getZ() + " State: " + engine.mActivity.mState);
-                String desiredKey = resolve(engine);
+            int offSet = 0;
+            if ((o instanceof MultiTileEntityBasicMachine)) {
+                MultiTileEntityBasicMachine te = (MultiTileEntityBasicMachine) o;
+                String mName = getMachineType(te);
+                if(Objects.equals(mName, "cokeoven")) offSet = 2;
+                if(te.getVisualData() > offSet){
+                    //System.out.println(getMachineType(te));
+                    //System.out.println(te.getVisualData());
+                    String desiredKey = resolve(mName, te.getVisualData());
+                    System.out.println("Machine: " + mName + ", Sound:" + desiredKey);
+                }
+
+
+                //System.out.println("Coord: " + engine.getX() + ", " + engine.getY() + ", " + engine.getZ() + " State: " + engine.mActivity.mState);
+                //String desiredKey = resolve(mName, te.getVisualData());
+
+                //System.out.println(desiredKey);
+                /*
 
                 if (desiredKey == null) {
-                    stopSound(engine);
+                    stopSound(te);
                     continue;
                 }
 
-                SoundLoop current = activeSounds.get(engine);
+                SoundLoop current = activeSounds.get(te);
 
                 if (current == null) {
-                    playLoop(desiredKey, engine);
+                    playLoop(desiredKey, te);
                     continue;
                 }
 
                 if (!desiredKey.equals(current.getKey())) {
-                    stopSound(engine);
-                    playLoop(desiredKey, engine);
+                    stopSound(te);
+                    playLoop(desiredKey, te);
                     continue;
                 }
 
                 current.updatePosition();
+
+                 */
             }
         }
 
-        cleanupInvalidTiles();
+        //cleanupInvalidTiles();
     }
 
     private void playLoop(String key, TileEntity te) {
@@ -74,19 +93,27 @@ public class GTSoundTickHandler {
         if(sound != null) mc.getSoundHandler().stopSound(sound);
     }
 
-    private String resolve(MultiTileEntityMotorLiquid engine) {
-        int s = engine.mActivity.mState;
-
-        switch (s) {
-            case 1: return SOUND_ACTIVE;
-            case 2: return SOUND_STALL;
-            default: return null;
-        }
+    private String resolve(String machine, int state) {
+        String[] mSound = MACHINE_SOUND_MAP.get(machine.toLowerCase());
+        if (mSound == null) return null;
+        if (state < 0 || state >= mSound.length) return null;
+        return mSound[state];
     }
+
+
 
     private void cleanupInvalidTiles(){
         activeSounds.keySet().removeIf(te ->
                 te.isInvalid() || te.getWorldObj() != mc.theWorld);
+    }
+
+    private String getMachineType(MultiTileEntityBasicMachine te) {
+        if (te.mRecipes == null) return null;
+        //String s = te.mRecipes.toString();
+        //int idx = s.lastIndexOf('.');
+        //if (idx == -1 || idx == s.length() - 1) return s;
+        //return te.mRecipes.toString().substring(idx + 1);
+        return te.mRecipes.toString().replace("gt.recipe.", "");
     }
 
 }
