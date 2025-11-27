@@ -655,7 +655,7 @@ public class GT_API_Proxy_Client extends GT_API_Proxy {
             field.set(mc, wrapped);
 
             // Create and REGISTER the DEDICATED Tick Handler, passing the INJECTED 'wrapped' instance.
-            GTSoundTickHandler tickHandler = new GTSoundTickHandler(wrapped);
+            GTSoundTickHandler tickHandler = new GTSoundTickHandler();
             MinecraftForge.EVENT_BUS.register(tickHandler);
 			FMLCommonHandler.instance().bus().register(tickHandler);
 
