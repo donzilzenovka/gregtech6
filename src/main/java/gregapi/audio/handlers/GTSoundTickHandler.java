@@ -1,5 +1,6 @@
 package gregapi.audio.handlers;
 
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import gregapi.audio.SoundLoop;
@@ -14,9 +15,12 @@ import java.util.Map;
 public class GTSoundTickHandler {
 
     private final Minecraft mc = Minecraft.getMinecraft();
-    private final Map<TileEntity, SoundLoop> activeSounds = new HashMap<>();
+    private final Map<TileEntity, ActiveSound> activeSounds = new HashMap<>();
 
     private static final Map<String, String[]> MACHINE_SOUND_MAP = new HashMap<>();
+    private static final Map<Class<?>, Field> RECIPE_FIELD_CACHE = new HashMap<>();
+    private static final Map<Class<?>, Method> VISUAL_METHOD_CACHE = new HashMap<>();
+    private static final Map<Class<?>, Field> INTERNAL_NAME_FIELD_CACHE = new HashMap<>();
 
     static {
         MACHINE_SOUND_MAP.put("MultiTileEntityFluidTap", new String[] { null, null, null, null});
@@ -26,94 +30,135 @@ public class GTSoundTickHandler {
         MACHINE_SOUND_MAP.put("MultiTileEntityMPipeFluid", new String[] {null, null, null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityBarrelMetal", new String[] {null, null, null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityResinHoleRubber", new String[] {null, null, null, null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityBumbleHive", new String[] {null, null, null, null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityBasicMachine", new String[] {null, null, null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityBumbleHive", new String[] {"bumble_hive", null, null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityPipeFluid", new String[] {null, null, null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityFluidFunnel", new String[] {null, null, null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityBush", new String[] {null, null, null, null});
+        MACHINE_SOUND_MAP.put("gt.recipe.distillery", new String[] {null, null, null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityAxle", new String[] {null, null, null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityGearBox", new String[] {null, null, null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityGeneratorBrick", new String[] {null, "burning_external", null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityGeneratorMetal", new String[] {null, "burning_external", null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityGeneratorGas", new String[] {null, "burning_gas", null, null});
 
 
     }
 
-    //private static final String SOUND_ACTIVE = "gregapi:gt.engine_active";
-    //private static final String SOUND_STALL = "gregapi:gt.engine_stall";
+    static String[] nameList = {"MultiTileEntityBasicMachine"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END || mc.theWorld == null) return;
 
         for (Object o : mc.theWorld.loadedTileEntityList) {
+            if (!(o instanceof TileEntity)) continue;
+            TileEntity te = (TileEntity) o;
+
+            double dx = te.xCoord - mc.thePlayer.posX;
+            double dy = te.yCoord - mc.thePlayer.posY;
+            double dz = te.zCoord - mc.thePlayer.posZ;
+            if (dx * dx + dy * dy + dz * dz > 256) continue;
+
             String desiredKey = null;
             int mState = -1;
-            String mName = null;
+            String mName = te.getClass().getSimpleName();
             String recipeName = null;
 
-            if (o instanceof TileEntity) {
-                Class<?> cls = o.getClass();
-                mName = cls.getSimpleName();
+            Method getVisualData = VISUAL_METHOD_CACHE.get(te.getClass());
+            if (getVisualData == null && !VISUAL_METHOD_CACHE.containsKey(te.getClass())) {
                 try {
-                    Method getVisualData = cls.getMethod("getVisualData");
+                    getVisualData = te.getClass().getMethod("getVisualData");
+                    VISUAL_METHOD_CACHE.put(te.getClass(), getVisualData);
+                } catch (Throwable ignored) {
+                    VISUAL_METHOD_CACHE.put(te.getClass(), null);
+                }
+            }
+            if (getVisualData != null) {
+                try {
                     mState = ((Number) getVisualData.invoke(o)).byteValue();
-                    } catch (Throwable ignored) {}
+                } catch (Throwable ignored) {
+                }
+            }
+
+            Field mRecipesField = RECIPE_FIELD_CACHE.get(te.getClass());
+            if (mRecipesField == null && !RECIPE_FIELD_CACHE.containsKey(te.getClass())) {
                 try {
-                    Field mRecipesField = cls.getDeclaredField("mRecipes");
+                    mRecipesField = te.getClass().getDeclaredField("mRecipes");
                     mRecipesField.setAccessible(true);
-                    Object recipeMap = mRecipesField.get(o);
-                    if (recipeMap != null){
-                        Field internalNameField = recipeMap.getClass().getField("aNameLocal");
-                        recipeName = (String) internalNameField.get(recipeMap);
+                    RECIPE_FIELD_CACHE.put(te.getClass(), mRecipesField);
+                } catch (Throwable ignored) {
+                    RECIPE_FIELD_CACHE.put(te.getClass(), null);
+                }
+            }
+
+            if (mRecipesField != null && nameListContains(mName)) {
+                try {
+                    Object recipeMap = mRecipesField.get(te);
+                    if (recipeMap != null) {
+                        Field internalNameField = INTERNAL_NAME_FIELD_CACHE.get(recipeMap.getClass());
+                        if (internalNameField == null && !INTERNAL_NAME_FIELD_CACHE.containsKey(recipeMap.getClass())) {
+                            try {
+                                internalNameField = recipeMap.getClass().getField("mInternalName");
+                                INTERNAL_NAME_FIELD_CACHE.put(recipeMap.getClass(), internalNameField);
+                            } catch (Throwable ignored) {
+                                INTERNAL_NAME_FIELD_CACHE.put(recipeMap.getClass(), null);
+                            }
+                        }
+                        if (internalNameField != null) recipeName = (String) internalNameField.get(recipeMap);
                     }
-                } catch (Throwable ignored) {}
-
-
-                if (mState != -1 && mName != null) {
-                   // if (!mName.equals("MultiTileEntityBush") && (!mName.equals("MultiTileEntityBumbleHive"))) { //TODO for debugging, remove
-
-                        System.out.println(mName);
-                        System.out.println(recipeName);
-                        System.out.println(mState);
-                    //}
-                    desiredKey = resolve(mName, mState);
-                    if (desiredKey != null) {
-                        //System.out.println(desiredKey); //TODO remove
-                    }
+                } catch (Throwable ignored) {
                 }
+            }
 
-                if (desiredKey == null) {
-                    stopSound((TileEntity) o);
-                    continue;
+
+            if (mState != -1) {
+                if (!mName.equals("MultiTileEntityBush")
+                        && (!mName.equals("MultiTileEntityBumbleHive"))
+                        && (!mName.equals("MultiTileEntityResinHoleRubber"))
+                        && (!mName.equals("MultiTileEntityFluidTap"))
+                        && (!mName.equals("MultiTileEntityBarrelMetal"))) { //TODO for debugging, remove
+
+                    //System.out.println(mName);
+                    //System.out.println(recipeName);
+                    //System.out.println(mState);
                 }
-
-                SoundLoop current = activeSounds.get((TileEntity) o);
-
-                if (current == null) {
-                    playLoop(desiredKey, (TileEntity) o);
-                    continue;
+                desiredKey = resolve(mName, mState);
+                if (desiredKey != null) {
+                    //System.out.println(desiredKey); //TODO remove
                 }
+            }
 
-                if (!desiredKey.equals(current.getKey())) {
-                    stopSound((TileEntity) o);
-                    playLoop(desiredKey, (TileEntity) o);
-                    continue;
-                }
-                current.updatePosition();
+            ActiveSound active = activeSounds.get(te);
+
+            if (desiredKey == null) {
+                if (active != null) stopSound(te);
+                continue;
+            }
+
+            if (active == null) {
+                playLoop("gregapi:gt." + desiredKey, te);
+            } else if (!desiredKey.equals(active.key)) {
+                stopSound(te);
+                playLoop("gregapi:gt." + desiredKey, te);
+            } else {
+                active.loop.updatePosition();
             }
         }
         cleanupInvalidTiles();
     }
 
-    private void playLoop(String key, TileEntity te) {
-        SoundLoop loop = new SoundLoop(key, te);
+    private void playLoop(String keyString, TileEntity te) {
+        SoundLoop loop = new SoundLoop(keyString, te);
         loop.setRepeat(true);
         loop.setVolume(0.45f);
         loop.setPitch(0.5f + (float)Math.random() * 0.1f);
-        activeSounds.put(te, loop);
+        activeSounds.put(te, new ActiveSound(loop, keyString));
         mc.getSoundHandler().playSound(loop);
     }
 
-    private void stopSound(TileEntity engine) {
-        SoundLoop sound = activeSounds.remove(engine);
-        if(sound != null) mc.getSoundHandler().stopSound(sound);
+    private void stopSound(TileEntity te) {
+        ActiveSound active = activeSounds.remove(te);
+        if(active != null) mc.getSoundHandler().stopSound(active.loop);
     }
 
     private String resolve(String machine, int state) {
@@ -126,8 +171,33 @@ public class GTSoundTickHandler {
         return mSound[state];
     }
 
-    private void cleanupInvalidTiles(){
-        activeSounds.keySet().removeIf(te ->
-                te.isInvalid() || te.getWorldObj() != mc.theWorld);
+    private void cleanupInvalidTiles() {
+        activeSounds.entrySet().removeIf(entry -> {
+            TileEntity te = entry.getKey();
+            ActiveSound active = entry.getValue();
+            if (te.isInvalid() || te.getWorldObj() != mc.theWorld) {
+                mc.getSoundHandler().stopSound(active.loop);
+                return true;
+            }
+            return false;
+        });
     }
+
+    private boolean nameListContains(String name) {
+        for (String s : nameList) {
+            if (s.equals(name)) return true;
+        }
+        return false;
+    }
+
+    private static class ActiveSound {
+        public final SoundLoop loop;
+        public String key;
+
+        public ActiveSound(SoundLoop loop, String key) {
+            this.loop = loop;
+            this.key = key;
+        }
+    }
+
 }

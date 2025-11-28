@@ -4,6 +4,8 @@
 "gt.beep":{"category":"player", "sounds":[{"name":"beep", "stream":false}]},
 "gt.engine_idle": {"category":"ambient", "sounds":[{"name": "engine_idle", "stream":false}]},
   "gt.engine_active": {"category":"ambient", "sounds":[{"name": "engine_active", "stream":false}]},
-  "gt.engine_stall": {"category":"ambient", "sounds":[{"name": "engine_stall", "stream":false}]}
+  "gt.engine_stall": {"category":"ambient", "sounds":[{"name": "engine_stall", "stream":false}]},
+  "gt.bumble_hive": {"category":"ambient", "sounds":[{"name": "bumble_hive", "stream":false}]},
+  "gt.burning_external": {"category":"ambient", "sounds":[{"name": "burning_external", "stream":false}]}
 
 }
