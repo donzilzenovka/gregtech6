@@ -3,80 +3,103 @@ package gregapi.audio.handlers;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import gregapi.audio.SoundLoop;
-import gregapi.tileentity.machines.MultiTileEntityBasicMachine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class GTSoundTickHandler {
 
     private final Minecraft mc = Minecraft.getMinecraft();
-
     private final Map<TileEntity, SoundLoop> activeSounds = new HashMap<>();
 
     private static final Map<String, String[]> MACHINE_SOUND_MAP = new HashMap<>();
 
     static {
-        MACHINE_SOUND_MAP.put("cokeoven", new String[] { null, null, null, "burning_internal"});
-        MACHINE_SOUND_MAP.put("centrifuge", new String[] {null, null, "spin_idle", "spin_processing"});
+        MACHINE_SOUND_MAP.put("MultiTileEntityFluidTap", new String[] { null, null, null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityCokeOven", new String[] { null, null, null, "burning_internal"});
+        MACHINE_SOUND_MAP.put("gt.recipe.centrifuge", new String[] {null, null, "spin_idle", "spin_processing"});
+        MACHINE_SOUND_MAP.put("MultiTileEntityMotorLiquid", new String[] {null, "engine_active", "engine_stall", null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityMPipeFluid", new String[] {null, null, null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityBarrelMetal", new String[] {null, null, null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityResinHoleRubber", new String[] {null, null, null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityBumbleHive", new String[] {null, null, null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityBasicMachine", new String[] {null, null, null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityPipeFluid", new String[] {null, null, null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityFluidFunnel", new String[] {null, null, null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityBush", new String[] {null, null, null, null});
+
+
     }
 
-    private static final String SOUND_ACTIVE = "gregapi:gt.engine_active";
-    private static final String SOUND_STALL = "gregapi:gt.engine_stall";
+    //private static final String SOUND_ACTIVE = "gregapi:gt.engine_active";
+    //private static final String SOUND_STALL = "gregapi:gt.engine_stall";
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END || mc.theWorld == null) return;
 
-        // Loop
         for (Object o : mc.theWorld.loadedTileEntityList) {
-            int offSet = 0;
-            if ((o instanceof MultiTileEntityBasicMachine)) {
-                MultiTileEntityBasicMachine te = (MultiTileEntityBasicMachine) o;
-                String mName = getMachineType(te);
-                if(Objects.equals(mName, "cokeoven")) offSet = 2;
-                if(te.getVisualData() > offSet){
-                    //System.out.println(getMachineType(te));
-                    //System.out.println(te.getVisualData());
-                    String desiredKey = resolve(mName, te.getVisualData());
-                    System.out.println("Machine: " + mName + ", Sound:" + desiredKey);
+            String desiredKey = null;
+            int mState = -1;
+            String mName = null;
+            String recipeName = null;
+
+            if (o instanceof TileEntity) {
+                Class<?> cls = o.getClass();
+                mName = cls.getSimpleName();
+                try {
+                    Method getVisualData = cls.getMethod("getVisualData");
+                    mState = ((Number) getVisualData.invoke(o)).byteValue();
+                    } catch (Throwable ignored) {}
+                try {
+                    Field mRecipesField = cls.getDeclaredField("mRecipes");
+                    mRecipesField.setAccessible(true);
+                    Object recipeMap = mRecipesField.get(o);
+                    if (recipeMap != null){
+                        Field internalNameField = recipeMap.getClass().getField("aNameLocal");
+                        recipeName = (String) internalNameField.get(recipeMap);
+                    }
+                } catch (Throwable ignored) {}
+
+
+                if (mState != -1 && mName != null) {
+                   // if (!mName.equals("MultiTileEntityBush") && (!mName.equals("MultiTileEntityBumbleHive"))) { //TODO for debugging, remove
+
+                        System.out.println(mName);
+                        System.out.println(recipeName);
+                        System.out.println(mState);
+                    //}
+                    desiredKey = resolve(mName, mState);
+                    if (desiredKey != null) {
+                        //System.out.println(desiredKey); //TODO remove
+                    }
                 }
 
-
-                //System.out.println("Coord: " + engine.getX() + ", " + engine.getY() + ", " + engine.getZ() + " State: " + engine.mActivity.mState);
-                //String desiredKey = resolve(mName, te.getVisualData());
-
-                //System.out.println(desiredKey);
-                /*
-
                 if (desiredKey == null) {
-                    stopSound(te);
+                    stopSound((TileEntity) o);
                     continue;
                 }
 
-                SoundLoop current = activeSounds.get(te);
+                SoundLoop current = activeSounds.get((TileEntity) o);
 
                 if (current == null) {
-                    playLoop(desiredKey, te);
+                    playLoop(desiredKey, (TileEntity) o);
                     continue;
                 }
 
                 if (!desiredKey.equals(current.getKey())) {
-                    stopSound(te);
-                    playLoop(desiredKey, te);
+                    stopSound((TileEntity) o);
+                    playLoop(desiredKey, (TileEntity) o);
                     continue;
                 }
-
                 current.updatePosition();
-
-                 */
             }
         }
-
-        //cleanupInvalidTiles();
+        cleanupInvalidTiles();
     }
 
     private void playLoop(String key, TileEntity te) {
@@ -94,26 +117,17 @@ public class GTSoundTickHandler {
     }
 
     private String resolve(String machine, int state) {
-        String[] mSound = MACHINE_SOUND_MAP.get(machine.toLowerCase());
-        if (mSound == null) return null;
+        String[] mSound = MACHINE_SOUND_MAP.get(machine);
+        if (mSound == null) {
+            System.out.println("WARNING: No sound map for: " + machine);
+            return null;
+        }
         if (state < 0 || state >= mSound.length) return null;
         return mSound[state];
     }
-
-
 
     private void cleanupInvalidTiles(){
         activeSounds.keySet().removeIf(te ->
                 te.isInvalid() || te.getWorldObj() != mc.theWorld);
     }
-
-    private String getMachineType(MultiTileEntityBasicMachine te) {
-        if (te.mRecipes == null) return null;
-        //String s = te.mRecipes.toString();
-        //int idx = s.lastIndexOf('.');
-        //if (idx == -1 || idx == s.length() - 1) return s;
-        //return te.mRecipes.toString().substring(idx + 1);
-        return te.mRecipes.toString().replace("gt.recipe.", "");
-    }
-
 }
