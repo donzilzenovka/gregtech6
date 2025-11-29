@@ -6,6 +6,9 @@
   "gt.engine_active": {"category":"ambient", "sounds":[{"name": "engine_active", "stream":false}]},
   "gt.engine_stall": {"category":"ambient", "sounds":[{"name": "engine_stall", "stream":false}]},
   "gt.bumble_hive": {"category":"ambient", "sounds":[{"name": "bumble_hive", "stream":false}]},
-  "gt.burning_external": {"category":"ambient", "sounds":[{"name": "burning_external", "stream":false}]}
+  "gt.burning_external": {"category":"ambient", "sounds":[{"name": "burning_external", "stream":false}]},
+  "gt.axle_turning": {"category":"ambient", "sounds":[{"name": "axle_turning", "stream":false}]},
+  "gt.spin_idle": {"category":"ambient", "sounds":[{"name": "spin_idle", "stream":false}]},
+  "gt.spin_processing": {"category":"ambient", "sounds":[{"name": "spin_processing", "stream":false}]}
 
 }
