@@ -16,6 +16,7 @@ public class GTSoundTickHandler {
 
     private final Minecraft mc = Minecraft.getMinecraft();
     private final Map<TileEntity, ActiveSound> activeSounds = new HashMap<>();
+    private static final String PREFIX = "gregapi:gt.";
 
     private static final Map<String, String[]> MACHINE_SOUND_MAP = new HashMap<>();
     private static final Map<Class<?>, Field> RECIPE_FIELD_CACHE = new HashMap<>();
@@ -136,10 +137,10 @@ public class GTSoundTickHandler {
             }
 
             if (active == null) {
-                playLoop("gregapi:gt." + desiredKey, te);
+                playLoop(PREFIX + desiredKey, te);
             } else if (!desiredKey.equals(active.key)) {
                 stopSound(te);
-                playLoop("gregapi:gt." + desiredKey, te);
+                playLoop(PREFIX + desiredKey, te);
             } else {
                 active.loop.updatePosition();
             }
@@ -152,7 +153,8 @@ public class GTSoundTickHandler {
         loop.setRepeat(true);
         loop.setVolume(0.45f);
         loop.setPitch(0.5f + (float)Math.random() * 0.1f);
-        activeSounds.put(te, new ActiveSound(loop, keyString));
+        String shortKey = keyString.substring(PREFIX.length());
+        activeSounds.put(te, new ActiveSound(loop, shortKey));
         mc.getSoundHandler().playSound(loop);
     }
 
@@ -174,9 +176,9 @@ public class GTSoundTickHandler {
     private void cleanupInvalidTiles() {
         activeSounds.entrySet().removeIf(entry -> {
             TileEntity te = entry.getKey();
-            ActiveSound active = entry.getValue();
-            if (te.isInvalid() || te.getWorldObj() != mc.theWorld) {
-                mc.getSoundHandler().stopSound(active.loop);
+            TileEntity worldTE = te.getWorldObj().getTileEntity(te.xCoord, te.yCoord, te.zCoord);
+            if (te.isInvalid() || te.getWorldObj() == null || worldTE != te) {
+                mc.getSoundHandler().stopSound(entry.getValue().loop);
                 return true;
             }
             return false;
@@ -193,11 +195,9 @@ public class GTSoundTickHandler {
     private static class ActiveSound {
         public final SoundLoop loop;
         public String key;
-
         public ActiveSound(SoundLoop loop, String key) {
             this.loop = loop;
             this.key = key;
         }
     }
-
 }
