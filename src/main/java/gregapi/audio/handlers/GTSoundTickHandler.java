@@ -23,30 +23,45 @@ public class GTSoundTickHandler {
     private final Map<TileEntity, ActiveSound> activeSounds = new HashMap<>();
     private static final String PREFIX = "gregapi:gt.";
 
-    private static final Map<String, String[]> MACHINE_SOUND_MAP = new HashMap<>();
+    private static final Map<String, String[]> SOUND_MAP = new HashMap<>();
     private static final Map<Class<?>, Method> VISUAL_METHOD_CACHE = new HashMap<>();
 
     static {
-        MACHINE_SOUND_MAP.put("MultiTileEntityFluidTap", new String[] { null, null, null, null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityCokeOven", new String[] { null, null, null, "burning_internal"});
-        MACHINE_SOUND_MAP.put("centrifuge", new String[] {null, null, "spin_idle", "spin_processing"});
-        MACHINE_SOUND_MAP.put("MultiTileEntityMotorLiquid", new String[] {null, "engine_active", "engine_idle", null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityMPipeFluid", new String[] {null, null, null, null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityBarrelMetal", new String[] {null, null, null, null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityResinHoleRubber", new String[] {null, null, null, null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityBumbleHive", new String[] {"bumble_hive", null, null, null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityPipeFluid", new String[] {null, null, null, null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityFluidFunnel", new String[] {null, null, null, null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityBush", new String[] {null, null, null, null});
-        MACHINE_SOUND_MAP.put("distillery", new String[] {null, null, "distill_idle", "distill_processing"});
-        MACHINE_SOUND_MAP.put("MultiTileEntityAxle", new String[] {null, null, "axle_turning", null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityGearBox", new String[] {null, "gear_turn", null, null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityGeneratorBrick", new String[] {null, "burning_external", null, null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityGeneratorMetal", new String[] {null, "burning_external", null, null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityGeneratorGas", new String[] {null, "burning_gas", null, null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityGeneratorLiquid", new String[] {null, "burning_external", null, null});
-        MACHINE_SOUND_MAP.put("bath", new String[] {null, null, null, "bath_processing"});
-        MACHINE_SOUND_MAP.put("MultiTileEntitySmeltery", new String[] {null, "stress_crack", null, null});
+        SOUND_MAP.put("MultiTileEntityFluidTap", new String[] { null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityCokeOven", new String[] { null, null, null, "burning_internal"});
+        SOUND_MAP.put("centrifuge", new String[] {null, null, "spin_idle", "spin_processing"});
+        SOUND_MAP.put("MultiTileEntityMotorLiquid", new String[] {null, "engine_active", "engine_idle", null});
+        SOUND_MAP.put("MultiTileEntityMPipeFluid", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBarrelMetal", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityResinHoleRubber", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBumbleHive", new String[] {"bumble_hive", null, null, null});
+        SOUND_MAP.put("MultiTileEntityPipeFluid", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityFluidFunnel", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBush", new String[] {null, null, null, null});
+        SOUND_MAP.put("distillery", new String[] {null, null, "distill_idle", "distill_processing"});
+        SOUND_MAP.put("MultiTileEntityAxle", new String[] {null, null, "axle_turning", null});
+        SOUND_MAP.put("MultiTileEntityGearBox", new String[] {null, "gear_turn", null, null});
+        SOUND_MAP.put("MultiTileEntityGeneratorBrick", new String[] {null, "burning_external", null, null});
+        SOUND_MAP.put("MultiTileEntityGeneratorMetal", new String[] {null, "burning_external", null, null});
+        SOUND_MAP.put("MultiTileEntityGeneratorGas", new String[] {null, "burning_gas", null, null});
+        SOUND_MAP.put("MultiTileEntityGeneratorLiquid", new String[] {null, "burning_external", null, null});
+        SOUND_MAP.put("bath", new String[] {null, null, null, "bath_processing"});
+        SOUND_MAP.put("MultiTileEntitySmeltery", new String[] {null, "stress_crack", null, null});
+        SOUND_MAP.put("MultiTileEntityMixingBowlTable", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityMortar", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityMold", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBarrelWood", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntitySafeMechanical", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBottleCrate", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityAdvancedCraftingTable", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityDrawerQuad", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityAnvil", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityGrindStone", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBathingPotTable", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityMassStorageStandard", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBookShelf", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityCrank", new String[] {null, null, null, null});
+
 
 
     }
@@ -54,7 +69,11 @@ public class GTSoundTickHandler {
     static String[] debugNameList = {"MultiTileEntityBush", "MultiTileEntityPipeFluid", "MultiTileEntityMotorLiquid",
     "MultiTileEntityBumbleHive", "MultiTileEntityResinHoleRubber", "MultiTileEntityFluidTap", "bath", "MultiTileEntityCokeOven",
     "MultiTileEntityGeneratorGas", "MultiTileEntityGeneratorLiquid", "MultiTileEntityGeneratorMetal", "MultiTileEntityBarrelMetal",
-    "MultiTileEntitySmeltery"};
+    "MultiTileEntitySmeltery", "distillery", "centrifuge", "MultiTileEntityGearBox", "MultiTileEntityAxle","MultiTileEntityMortar",
+    "MultiTileEntityMold", "MultiTileEntityMixingBowlTable", "MultiTileEntityFluidFunnel", "MultiTileEntityBarrelWood",
+    "MultiTileEntitySafeMechanical", "MultiTileEntityBottleCrate", "MultiTileEntityAdvancedCraftingTable", "MultiTileEntityDrawerQuad",
+    "MultiTileEntityAnvil", "MultiTileEntityGrindStone", "MultiTileEntityBathingPotTable", "MultiTileEntityMassStorageStandard",
+    "MultiTileEntityBookShelf", "MultiTileEntityCrank"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -158,10 +177,10 @@ public class GTSoundTickHandler {
         if(active != null) mc.getSoundHandler().stopSound(active.loop);
     }
 
-    private String resolve(String machine, int state) {
-        String[] mSound = MACHINE_SOUND_MAP.get(machine);
+    private String resolve(String tileEnt, int state) {
+        String[] mSound = SOUND_MAP.get(tileEnt);
         if (mSound == null) {
-            System.out.println("WARNING: No sound map for: " + machine);
+            System.out.println("WARNING: No sound map for: " + tileEnt);
             return null;
         }
         if (state < 0 || state >= mSound.length) return null;
