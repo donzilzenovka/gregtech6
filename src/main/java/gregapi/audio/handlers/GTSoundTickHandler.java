@@ -5,14 +5,23 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import gregapi.audio.SoundLoop;
 import gregapi.code.IMath;
+import gregapi.fluid.FluidTankGT;
+import gregapi.tileentity.connectors.MultiTileEntityPipeFluid;
 import gregapi.tileentity.machines.MultiTileEntityBasicMachine;
+import gregtech.tileentity.energy.transformers.MultiTileEntityGearBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static gregapi.data.CS.B;
 
 public class GTSoundTickHandler {
 
@@ -27,7 +36,7 @@ public class GTSoundTickHandler {
         MACHINE_SOUND_MAP.put("MultiTileEntityFluidTap", new String[] { null, null, null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityCokeOven", new String[] { null, null, null, "burning_internal"});
         MACHINE_SOUND_MAP.put("centrifuge", new String[] {null, null, "spin_idle", "spin_processing"});
-        MACHINE_SOUND_MAP.put("MultiTileEntityMotorLiquid", new String[] {null, "engine_active", "engine_stall", null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityMotorLiquid", new String[] {null, "engine_active", "engine_idle", null});
         MACHINE_SOUND_MAP.put("MultiTileEntityMPipeFluid", new String[] {null, null, null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityBarrelMetal", new String[] {null, null, null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityResinHoleRubber", new String[] {null, null, null, null});
@@ -37,10 +46,12 @@ public class GTSoundTickHandler {
         MACHINE_SOUND_MAP.put("MultiTileEntityBush", new String[] {null, null, null, null});
         MACHINE_SOUND_MAP.put("distillery", new String[] {null, null, null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityAxle", new String[] {null, null, "axle_turning", null});
-        MACHINE_SOUND_MAP.put("MultiTileEntityGearBox", new String[] {null, null, null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityGearBox", new String[] {null, "gear_turn", null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityGeneratorBrick", new String[] {null, "burning_external", null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityGeneratorMetal", new String[] {null, "burning_external", null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityGeneratorGas", new String[] {null, "burning_gas", null, null});
+        MACHINE_SOUND_MAP.put("MultiTileEntityGeneratorLiquid", new String[] {null, "burning_external", null, null});
+        MACHINE_SOUND_MAP.put("bath", new String[] {null, null, null, "bath_processing"});
 
 
     }
@@ -84,12 +95,24 @@ public class GTSoundTickHandler {
                 mName = ((MultiTileEntityBasicMachine) (TileEntity)o).mRecipes.toString().replace("gt.recipe.", "");
             }
 
+            if (mName.equals("MultiTileEntityGearBox")) {
+                int mRotationData = ((MultiTileEntityGearBox) (TileEntity)o).mRotationData;
+                mState = (byte) (mRotationData & B[6]) != 0 ? 1 : 0;
+            }
+
 
             if (mState != -1 && !isOutOfRange) {
                 if (!mName.equals("MultiTileEntityBush")
+                        && (!mName.equals("MultiTileEntityPipeFluid"))
+                        && (!mName.equals("MultiTileEntityMotorLiquid"))
                         && (!mName.equals("MultiTileEntityBumbleHive"))
                         && (!mName.equals("MultiTileEntityResinHoleRubber"))
                         && (!mName.equals("MultiTileEntityFluidTap"))
+                        && (!mName.equals("bath"))
+                        && (!mName.equals("MultiTileEntityCokeOven"))
+                        && (!mName.equals("MultiTileEntityGeneratorGas"))
+                        && (!mName.equals("MultiTileEntityGeneratorLiquid"))
+                        && (!mName.equals("MultiTileEntityGeneratorMetal"))
                         && (!mName.equals("MultiTileEntityBarrelMetal"))) { //TODO for debugging, remove
 
                     System.out.println(mName);

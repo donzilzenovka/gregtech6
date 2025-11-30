@@ -7,8 +7,11 @@
   "gt.engine_stall": {"category":"ambient", "sounds":[{"name": "engine_stall", "stream":false}]},
   "gt.bumble_hive": {"category":"ambient", "sounds":[{"name": "bumble_hive", "stream":false}]},
   "gt.burning_external": {"category":"ambient", "sounds":[{"name": "burning_external", "stream":false}]},
+  "gt.burning_internal": {"category":"ambient", "sounds":[{"name": "burning_internal", "stream":false}]},
   "gt.axle_turning": {"category":"ambient", "sounds":[{"name": "axle_turning", "stream":false}]},
   "gt.spin_idle": {"category":"ambient", "sounds":[{"name": "spin_idle", "stream":false}]},
-  "gt.spin_processing": {"category":"ambient", "sounds":[{"name": "spin_processing", "stream":false}]}
-
+  "gt.spin_processing": {"category":"ambient", "sounds":[{"name": "spin_processing", "stream":false}]},
+  "gt.gear_turn": {"category":"ambient", "sounds":[{"name": "gear_turn", "stream":false}]},
+  "gt.burning_gas": {"category":"ambient", "sounds":[{"name": "burning_gas", "stream":false}]},
+  "gt.bath_processing": {"category":"ambient", "sounds":[{"name": "bath_processing", "stream":false}]}
 }
