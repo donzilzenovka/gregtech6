@@ -4,21 +4,15 @@ package gregapi.audio.handlers;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import gregapi.audio.SoundLoop;
-import gregapi.code.IMath;
-import gregapi.fluid.FluidTankGT;
-import gregapi.tileentity.connectors.MultiTileEntityPipeFluid;
 import gregapi.tileentity.machines.MultiTileEntityBasicMachine;
 import gregtech.tileentity.energy.transformers.MultiTileEntityGearBox;
+import gregtech.tileentity.tools.MultiTileEntitySmeltery;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fluids.FluidStack;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static gregapi.data.CS.B;
@@ -44,7 +38,7 @@ public class GTSoundTickHandler {
         MACHINE_SOUND_MAP.put("MultiTileEntityPipeFluid", new String[] {null, null, null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityFluidFunnel", new String[] {null, null, null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityBush", new String[] {null, null, null, null});
-        MACHINE_SOUND_MAP.put("distillery", new String[] {null, null, null, null});
+        MACHINE_SOUND_MAP.put("distillery", new String[] {null, null, "distill_idle", "distill_processing"});
         MACHINE_SOUND_MAP.put("MultiTileEntityAxle", new String[] {null, null, "axle_turning", null});
         MACHINE_SOUND_MAP.put("MultiTileEntityGearBox", new String[] {null, "gear_turn", null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityGeneratorBrick", new String[] {null, "burning_external", null, null});
@@ -52,11 +46,15 @@ public class GTSoundTickHandler {
         MACHINE_SOUND_MAP.put("MultiTileEntityGeneratorGas", new String[] {null, "burning_gas", null, null});
         MACHINE_SOUND_MAP.put("MultiTileEntityGeneratorLiquid", new String[] {null, "burning_external", null, null});
         MACHINE_SOUND_MAP.put("bath", new String[] {null, null, null, "bath_processing"});
+        MACHINE_SOUND_MAP.put("MultiTileEntitySmeltery", new String[] {null, "stress_crack", null, null});
 
 
     }
 
-    static String[] nameList = {"MultiTileEntityBasicMachine"};
+    static String[] debugNameList = {"MultiTileEntityBush", "MultiTileEntityPipeFluid", "MultiTileEntityMotorLiquid",
+    "MultiTileEntityBumbleHive", "MultiTileEntityResinHoleRubber", "MultiTileEntityFluidTap", "bath", "MultiTileEntityCokeOven",
+    "MultiTileEntityGeneratorGas", "MultiTileEntityGeneratorLiquid", "MultiTileEntityGeneratorMetal", "MultiTileEntityBarrelMetal",
+    "MultiTileEntitySmeltery"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -100,24 +98,24 @@ public class GTSoundTickHandler {
                 mState = (byte) (mRotationData & B[6]) != 0 ? 1 : 0;
             }
 
+            if (mName.equals("MultiTileEntitySmeltery")) {
+                MultiTileEntitySmeltery se = (MultiTileEntitySmeltery) (TileEntity) o;
+                try {
+                    Field meltDown = MultiTileEntitySmeltery.class.getDeclaredField("mMeltDown");
+                    meltDown.setAccessible(true);
+                    Object isMeltdown = meltDown.get(se);
+                    mState = (boolean)isMeltdown ? 1 : 0;
+                } catch (Throwable ignored){}
+            }
+
 
             if (mState != -1 && !isOutOfRange) {
-                if (!mName.equals("MultiTileEntityBush")
-                        && (!mName.equals("MultiTileEntityPipeFluid"))
-                        && (!mName.equals("MultiTileEntityMotorLiquid"))
-                        && (!mName.equals("MultiTileEntityBumbleHive"))
-                        && (!mName.equals("MultiTileEntityResinHoleRubber"))
-                        && (!mName.equals("MultiTileEntityFluidTap"))
-                        && (!mName.equals("bath"))
-                        && (!mName.equals("MultiTileEntityCokeOven"))
-                        && (!mName.equals("MultiTileEntityGeneratorGas"))
-                        && (!mName.equals("MultiTileEntityGeneratorLiquid"))
-                        && (!mName.equals("MultiTileEntityGeneratorMetal"))
-                        && (!mName.equals("MultiTileEntityBarrelMetal"))) { //TODO for debugging, remove
+                if (!debugNameIgnoreListContains(mName)){//TODO for debugging, remove
 
                     System.out.println(mName);
                     System.out.println(mState);
                 }
+
                 desiredKey = resolve(mName, mState);
                 if (desiredKey != null) {
                     //System.out.println(desiredKey); //TODO remove
@@ -149,7 +147,7 @@ public class GTSoundTickHandler {
         SoundLoop loop = new SoundLoop(keyString, te);
         loop.setRepeat(true);
         loop.setVolume(1.0f);
-        loop.setPitch(1.0f + (float)Math.random() * 0.1f);
+        loop.setPitch(0.85f + (float)Math.random() * 0.30f);
         String shortKey = keyString.substring(PREFIX.length());
         activeSounds.put(te, new ActiveSound(loop, shortKey));
         mc.getSoundHandler().playSound(loop);
@@ -182,8 +180,8 @@ public class GTSoundTickHandler {
         });
     }
 
-    private boolean nameListContains(String name) {
-        for (String s : nameList) {
+    private boolean debugNameIgnoreListContains(String name) {
+        for (String s : debugNameList) {
             if (s.equals(name)) return true;
         }
         return false;

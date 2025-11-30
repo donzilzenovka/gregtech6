@@ -14,7 +14,7 @@ import static gregapi.data.CS.*;
 
 
 public class GTSoundHandler extends SoundHandler {
-    boolean logDebug = true;
+    boolean logDebug = false;
 
     public GTSoundHandler(SoundHandler originalHandler) {
         super(getResourceManager(originalHandler), getGameSettings(originalHandler));
