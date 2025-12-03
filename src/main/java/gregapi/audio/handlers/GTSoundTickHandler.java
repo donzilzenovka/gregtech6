@@ -19,12 +19,17 @@ import static gregapi.data.CS.B;
 
 public class GTSoundTickHandler {
 
+    private final GTSoundHandler soundHandler;
     private final Minecraft mc = Minecraft.getMinecraft();
     private final Map<TileEntity, ActiveSound> activeSounds = new HashMap<>();
     private static final String PREFIX = "gregapi:gt.";
 
     private static final Map<String, String[]> SOUND_MAP = new HashMap<>();
     private static final Map<Class<?>, Method> VISUAL_METHOD_CACHE = new HashMap<>();
+
+    public GTSoundTickHandler(GTSoundHandler handler) {
+        this.soundHandler = handler;
+    }
 
     static {
         SOUND_MAP.put("MultiTileEntityFluidTap", new String[] { null, null, null, null});

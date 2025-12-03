@@ -644,24 +644,34 @@ public class GT_API_Proxy_Client extends GT_API_Proxy {
 	
 	private static List<Block> ROTATABLE_VANILLA_BLOCKS = Arrays.asList(Blocks.piston, Blocks.sticky_piston, Blocks.furnace, Blocks.lit_furnace, Blocks.dropper, Blocks.dispenser, Blocks.chest, Blocks.trapped_chest, Blocks.ender_chest, Blocks.hopper, Blocks.pumpkin, Blocks.lit_pumpkin);
 
-    public static void injectSoundHandler() {
-        try {
-            Minecraft mc = Minecraft.getMinecraft();
+	public static void injectSoundHandler() {
+		try {
+			Minecraft mc = Minecraft.getMinecraft();
 
-            Field field = Minecraft.class.getDeclaredField("mcSoundHandler");
-            field.setAccessible(true);
-            SoundHandler original = (SoundHandler) field.get(mc);
-            GTSoundHandler wrapped = new GTSoundHandler(original);
-            field.set(mc, wrapped);
+			SoundHandler original = null;
+			Field targetField = null;
 
-            // Create and REGISTER the DEDICATED Tick Handler, passing the INJECTED 'wrapped' instance.
-            GTSoundTickHandler tickHandler = new GTSoundTickHandler();
-            MinecraftForge.EVENT_BUS.register(tickHandler);
-			FMLCommonHandler.instance().bus().register(tickHandler);
+			for (Field f : Minecraft.class.getDeclaredFields()) {
+				f.setAccessible(true);
+				if (SoundHandler.class.isAssignableFrom(f.getType())) {
+					original = (SoundHandler) f.get(mc);
+					targetField = f;
+					break;
+				}
+			}
+			GTSoundHandler wrapped = new GTSoundHandler(original);
 
-            OUT.println("GT_Mod: Injected custom SoundHandler successfully.");
-        } catch (Exception e) {
-            ERR.println("GT_Mod: Failed to inject SoundHandler");
-        }
-    }
+			targetField.set(mc, wrapped);
+			GTSoundTickHandler tickHandler = new GTSoundTickHandler(wrapped);
+
+			MinecraftForge.EVENT_BUS.register(tickHandler);
+			FMLCommonHandler.instance()
+					.bus()
+					.register(tickHandler);
+
+			OUT.println("[HeavySwing] Injected custom SoundHandler successfully and registered Tick Handler.");
+		} catch (Exception e) {
+			ERR.println("[HeavySwing] Failed to inject SoundHandler");
+		}
+	}
 }
