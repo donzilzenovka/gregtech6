@@ -66,6 +66,9 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("MultiTileEntityMassStorageStandard", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityBookShelf", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityCrank", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntitySafeKeyLocked", new String[] {null, null, null, null});
+        SOUND_MAP.put("shredder", new String[] {null, null, "shredder_idle", "shredder_processing"});
+        SOUND_MAP.put("MultiTileEntityPipeItem", new String[] {null, null, null, null});
 
 
 
@@ -78,7 +81,7 @@ public class GTSoundTickHandler {
     "MultiTileEntityMold", "MultiTileEntityMixingBowlTable", "MultiTileEntityFluidFunnel", "MultiTileEntityBarrelWood",
     "MultiTileEntitySafeMechanical", "MultiTileEntityBottleCrate", "MultiTileEntityAdvancedCraftingTable", "MultiTileEntityDrawerQuad",
     "MultiTileEntityAnvil", "MultiTileEntityGrindStone", "MultiTileEntityBathingPotTable", "MultiTileEntityMassStorageStandard",
-    "MultiTileEntityBookShelf", "MultiTileEntityCrank"};
+    "MultiTileEntityBookShelf", "MultiTileEntityCrank", "MultiTileEntitySafeKeyLocked", "MultiTileEntityPipeItem"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
