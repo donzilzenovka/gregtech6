@@ -16,5 +16,7 @@
   "gt.bath_processing": {"category":"ambient", "sounds":[{"name": "bath_processing", "stream":false}]},
   "gt.stress_crack": {"category":"ambient", "sounds":[{"name": "stress_crack", "stream":false}]},
   "gt.distill_idle": {"category":"ambient", "sounds":[{"name": "distill_idle", "stream":false}]},
-  "gt.distill_processing": {"category":"ambient", "sounds":[{"name": "distill_processing", "stream":false}]}
+  "gt.distill_processing": {"category":"ambient", "sounds":[{"name": "distill_processing", "stream":false}]},
+  "gt.shredder_idle": {"category":"ambient", "sounds":[{"name": "shredder_idle", "stream":false}]},
+  "gt.shredder_processing": {"category":"ambient", "sounds":[{"name": "shredder_processing", "stream":false}]}
 }
