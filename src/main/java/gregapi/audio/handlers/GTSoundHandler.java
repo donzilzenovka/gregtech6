@@ -48,6 +48,7 @@ public class GTSoundHandler extends SoundHandler {
         return mgr;
     }
 
+    @SuppressWarnings("unchecked")
     private static <T> T getPrivateFieldValueByType(Object target, Class<T> type) {
         if (target == null) return null;
         Field f = findAccessibleFieldByType(target.getClass(), type);

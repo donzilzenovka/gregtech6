@@ -14,6 +14,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import static gregapi.data.CS.B;
 
@@ -22,6 +23,7 @@ public class GTSoundTickHandler {
     private final GTSoundHandler soundHandler;
     private final Minecraft mc = Minecraft.getMinecraft();
     private final Map<TileEntity, ActiveSound> activeSounds = new HashMap<>();
+    public static final WeakHashMap<TileEntity, Integer> teSoundTokens = new WeakHashMap<>();
     private static final String PREFIX = "gregapi:gt.";
 
     private static final Map<String, String[]> SOUND_MAP = new HashMap<>();
@@ -81,7 +83,7 @@ public class GTSoundTickHandler {
     "MultiTileEntityMold", "MultiTileEntityMixingBowlTable", "MultiTileEntityFluidFunnel", "MultiTileEntityBarrelWood",
     "MultiTileEntitySafeMechanical", "MultiTileEntityBottleCrate", "MultiTileEntityAdvancedCraftingTable", "MultiTileEntityDrawerQuad",
     "MultiTileEntityAnvil", "MultiTileEntityGrindStone", "MultiTileEntityBathingPotTable", "MultiTileEntityMassStorageStandard",
-    "MultiTileEntityBookShelf", "MultiTileEntityCrank", "MultiTileEntitySafeKeyLocked", "MultiTileEntityPipeItem"};
+    "MultiTileEntityBookShelf", "MultiTileEntityCrank", "MultiTileEntitySafeKeyLocked", "MultiTileEntityPipeItem", "shredder"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -96,44 +98,14 @@ public class GTSoundTickHandler {
             double dz = te.zCoord - mc.thePlayer.posZ;
             boolean isOutOfRange = (dx * dx + dy * dy + dz * dz > 256);
 
-            String desiredKey = null;
-            int mState = -1;
             String mName = te.getClass().getSimpleName();
-
-            Method getVisualData = VISUAL_METHOD_CACHE.get(te.getClass());
-            if (getVisualData == null && !VISUAL_METHOD_CACHE.containsKey(te.getClass())) {
-                try {
-                    getVisualData = te.getClass().getMethod("getVisualData");
-                    VISUAL_METHOD_CACHE.put(te.getClass(), getVisualData);
-                } catch (Throwable ignored) {
-                    VISUAL_METHOD_CACHE.put(te.getClass(), null);
-                }
-            }
-            if (getVisualData != null) {
-                try {
-                    mState = ((Number) getVisualData.invoke(o)).byteValue();
-                } catch (Throwable ignored) {
-                }
-            }
-
             if (mName.equals("MultiTileEntityBasicMachine")) {
-                mName = ((MultiTileEntityBasicMachine) (TileEntity)o).mRecipes.toString().replace("gt.recipe.", "");
+                mName = ((MultiTileEntityBasicMachine) (TileEntity)te).mRecipes.toString().replace("gt.recipe.", "");
             }
+            String desiredKey = null;
+            int mState = getTileEntityState(te);
 
-            if (mName.equals("MultiTileEntityGearBox")) {
-                int mRotationData = ((MultiTileEntityGearBox) (TileEntity)o).mRotationData;
-                mState = (byte) (mRotationData & B[6]) != 0 ? 1 : 0;
-            }
 
-            if (mName.equals("MultiTileEntitySmeltery")) {
-                MultiTileEntitySmeltery se = (MultiTileEntitySmeltery) (TileEntity) o;
-                try {
-                    Field meltDown = MultiTileEntitySmeltery.class.getDeclaredField("mMeltDown");
-                    meltDown.setAccessible(true);
-                    Object isMeltdown = meltDown.get(se);
-                    mState = (boolean)isMeltdown ? 1 : 0;
-                } catch (Throwable ignored){}
-            }
 
 
             if (mState != -1 && !isOutOfRange) {
@@ -150,39 +122,54 @@ public class GTSoundTickHandler {
             }
 
             ActiveSound active = activeSounds.get(te);
+            if (active != null){
+                int currentToken = teSoundTokens.getOrDefault(te, 0);
+                if (active.token != currentToken) {
+                    stopSound(te);
+                    active = null;
+                }
+            }
+
             boolean isSoundPlaying = active != null && mc.getSoundHandler().isSoundPlaying(active.loop);
+
             //fix out of range audio not restarting
             if (isOutOfRange || desiredKey == null) {
+                teSoundTokens.put(te, teSoundTokens.getOrDefault(te, 0) + 1);
                 if (active != null) stopSound(te);
                 continue;
             }
 
             if (!isSoundPlaying) {
                 if(active != null) stopSound(te);
-                playLoop(PREFIX + desiredKey, te);
+                playLoop(PREFIX + desiredKey, te, mState);
             } else if (!desiredKey.equals(active.key)) {
+                teSoundTokens.put(te, teSoundTokens.getOrDefault(te, 0) + 1);
                 stopSound(te);
-                playLoop(PREFIX + desiredKey, te);
+                playLoop(PREFIX + desiredKey, te, mState);
             } else {
-                active.loop.updatePosition();
+                active.loop.update();
             }
         }
         cleanupInvalidTiles();
     }
 
-    private void playLoop(String keyString, TileEntity te) {
-        SoundLoop loop = new SoundLoop(keyString, te);
+    private void playLoop(String keyString, TileEntity te, int mState) {
+        int newToken = teSoundTokens.getOrDefault(te, 0) + 1;
+        teSoundTokens.put(te, newToken);
+
+        SoundLoop loop = new SoundLoop(keyString, te, newToken, mState);
         loop.setRepeat(true);
         loop.setVolume(1.0f);
         loop.setPitch(0.85f + (float)Math.random() * 0.30f);
         String shortKey = keyString.substring(PREFIX.length());
-        activeSounds.put(te, new ActiveSound(loop, shortKey));
+        activeSounds.put(te, new ActiveSound(loop, shortKey, newToken));
         mc.getSoundHandler().playSound(loop);
     }
 
     private void stopSound(TileEntity te) {
         ActiveSound active = activeSounds.remove(te);
         if(active != null) mc.getSoundHandler().stopSound(active.loop);
+        teSoundTokens.put(te, teSoundTokens.getOrDefault(te, 0) + 1);
     }
 
     private String resolve(String tileEnt, int state) {
@@ -201,6 +188,7 @@ public class GTSoundTickHandler {
             TileEntity worldTE = te.getWorldObj().getTileEntity(te.xCoord, te.yCoord, te.zCoord);
             if (te.isInvalid() || te.getWorldObj() == null || worldTE != te) {
                 mc.getSoundHandler().stopSound(entry.getValue().loop);
+                teSoundTokens.put(te, teSoundTokens.getOrDefault(te, 0) + 1);
                 return true;
             }
             return false;
@@ -217,9 +205,52 @@ public class GTSoundTickHandler {
     private static class ActiveSound {
         public final SoundLoop loop;
         public String key;
-        public ActiveSound(SoundLoop loop, String key) {
+        public final int token;
+
+        public ActiveSound(SoundLoop loop, String key, int token) {
             this.loop = loop;
             this.key = key;
+            this.token = token;
         }
+    }
+
+    public static int getTileEntityState(TileEntity te) {
+        int mState = -1;
+        String mName = te.getClass().getSimpleName();
+
+        Method getVisualData = VISUAL_METHOD_CACHE.get(te.getClass());
+        if (getVisualData == null && !VISUAL_METHOD_CACHE.containsKey(te.getClass())) {
+            try {
+                getVisualData = te.getClass().getMethod("getVisualData");
+                VISUAL_METHOD_CACHE.put(te.getClass(), getVisualData);
+            } catch (Throwable ignored) {
+                VISUAL_METHOD_CACHE.put(te.getClass(), null);
+            }
+        }
+        if (getVisualData != null) {
+            try {
+                mState = ((Number) getVisualData.invoke(te)).byteValue();
+            } catch (Throwable ignored) {}
+        }
+
+        if (mName.equals("MultiTileEntityBasicMachine")) {
+            mName = ((MultiTileEntityBasicMachine) (TileEntity)te).mRecipes.toString().replace("gt.recipe.", "");
+        }
+
+        if (mName.equals("MultiTileEntityGearBox")) {
+            int mRotationData = ((MultiTileEntityGearBox) (TileEntity)te).mRotationData;
+            mState = (byte) (mRotationData & B[6]) != 0 ? 1 : 0;
+        }
+
+        if (mName.equals("MultiTileEntitySmeltery")) {
+            MultiTileEntitySmeltery se = (MultiTileEntitySmeltery) (TileEntity) te;
+            try {
+                Field meltDown = MultiTileEntitySmeltery.class.getDeclaredField("mMeltDown");
+                meltDown.setAccessible(true);
+                Object isMeltdown = meltDown.get(se);
+                mState = (boolean)isMeltdown ? 1 : 0;
+            } catch (Throwable ignored){}
+        }
+        return mState;
     }
 }

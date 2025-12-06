@@ -1,6 +1,8 @@
 package gregapi.audio;
 
+import gregapi.audio.handlers.GTSoundTickHandler;
 import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.MovingSound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -9,15 +11,21 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 
 @SideOnly(Side.CLIENT)
-public class SoundLoop extends PositionedSound implements ISound {
+public class SoundLoop extends MovingSound {
 
     public final String key;
     private final TileEntity source;
+    private final int token;
+    private final int expectedState;
 
-    public SoundLoop(String soundKey, TileEntity te) {
+
+    public SoundLoop(String soundKey, TileEntity te, int token, int expectedState) {
         super(new ResourceLocation(soundKey));
         this.key = soundKey;
         this.source = te;
+        this.token = token;
+        this.expectedState = expectedState;
+
         this.repeat = true;          // loop
         this.field_147665_h = 0;     // repeatDelay
         this.volume = 0.45F;         // volume
@@ -30,12 +38,28 @@ public class SoundLoop extends PositionedSound implements ISound {
 
     public String getKey() {return key;}
 
-    public void updatePosition() {
-        if (source != null && !source.isInvalid()) {
-            this.xPosF = source.xCoord + 0.5f;
-            this.yPosF = source.yCoord + 0.5f;
-            this.zPosF = source.zCoord + 0.5f;
+    @Override
+    public void update() {
+        if (source == null || source.isInvalid() || source.getWorldObj() == null) {
+            this.donePlaying = true;
+            return;
         }
+
+        TileEntity atPos = source.getWorldObj().getTileEntity(source.xCoord, source.yCoord, source.zCoord);
+        if (atPos != source) {
+            this.donePlaying = true;
+            return;
+        }
+
+        int currentState = GTSoundTickHandler.getTileEntityState(source);
+        if(currentState != expectedState) {
+            this.donePlaying = true;
+            return;
+        }
+
+        this.xPosF = source.xCoord + 0.5f;
+        this.yPosF = source.yCoord + 0.5f;
+        this.zPosF = source.zCoord + 0.5f;
     }
 
     public void setVolume(float volume) {
@@ -49,6 +73,4 @@ public class SoundLoop extends PositionedSound implements ISound {
     public void setRepeat(boolean repeat) {
         this.repeat = repeat;
     }
-
-
 }
