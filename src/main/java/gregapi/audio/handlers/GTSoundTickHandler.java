@@ -5,6 +5,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import gregapi.audio.SoundLoop;
 import gregapi.tileentity.machines.MultiTileEntityBasicMachine;
+import gregtech.tileentity.energy.converters.MultiTileEntityBoilerTank;
 import gregtech.tileentity.energy.transformers.MultiTileEntityGearBox;
 import gregtech.tileentity.tools.MultiTileEntitySmeltery;
 import net.minecraft.client.Minecraft;
@@ -71,6 +72,21 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("MultiTileEntitySafeKeyLocked", new String[] {null, null, null, null});
         SOUND_MAP.put("shredder", new String[] {null, null, "shredder_idle", "shredder_processing"});
         SOUND_MAP.put("MultiTileEntityPipeItem", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityHopper", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityTank3x3x3Metal", new String[] {null, null, null, null});
+        SOUND_MAP.put("drying", new String[] {null, null, "distill_idle", "dryer_processing"});
+        SOUND_MAP.put("MultiTileEntityTurbineSteam", new String[] {null, "steam_turbine_running", "steam_turbine_stall", null});
+        SOUND_MAP.put("MultiTileEntityBoilerTank", new String[] {
+                null, "boiler_1", "boiler_2", "boiler_3", "boiler_4", "boiler_5", "boiler_6", "boiler_7", "boiler_8",
+                "boiler_9", "boiler_10", "boiler_11", "boiler_12", "boiler_13", "boiler_14", "boiler_15", "boiler_16",
+                "boiler_17", "boiler_18", "boiler_19", "boiler_20", "boiler_21", "boiler_22", "boiler_23", "boiler_24",
+                "boiler_25", "boiler_26", "boiler_27", "boiler_28", "boiler_29", "boiler_30", "boiler_31"});
+        SOUND_MAP.put("sluice", new String[] {null, null, "sluice_idle", "sluice_processing"});
+        
+        SOUND_MAP.put("crusher", new String[] {null, "crusher_idle", null, null});
+        SOUND_MAP.put("MultiTileEntityEngineSteam", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityGeneratorHotFluid", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityPump", new String[] {null, null, "sluice_idle", "sluice_processing"});
 
 
 
@@ -83,7 +99,9 @@ public class GTSoundTickHandler {
     "MultiTileEntityMold", "MultiTileEntityMixingBowlTable", "MultiTileEntityFluidFunnel", "MultiTileEntityBarrelWood",
     "MultiTileEntitySafeMechanical", "MultiTileEntityBottleCrate", "MultiTileEntityAdvancedCraftingTable", "MultiTileEntityDrawerQuad",
     "MultiTileEntityAnvil", "MultiTileEntityGrindStone", "MultiTileEntityBathingPotTable", "MultiTileEntityMassStorageStandard",
-    "MultiTileEntityBookShelf", "MultiTileEntityCrank", "MultiTileEntitySafeKeyLocked", "MultiTileEntityPipeItem", "shredder"};
+    "MultiTileEntityBookShelf", "MultiTileEntityCrank", "MultiTileEntitySafeKeyLocked", "MultiTileEntityPipeItem", "shredder",
+            "MultiTileEntityHopper", "MultiTileEntityTank3x3x3Metal", "drying", "MultiTileEntityBoilerTank", "sluice",
+            "MultiTileEntityTurbineSteam"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -160,7 +178,8 @@ public class GTSoundTickHandler {
         SoundLoop loop = new SoundLoop(keyString, te, newToken, mState);
         loop.setRepeat(true);
         loop.setVolume(1.0f);
-        loop.setPitch(0.85f + (float)Math.random() * 0.30f);
+        //loop.setPitch(0.85f + (float)Math.random() * 0.30f);
+        loop.setPitch(0.85f);
         String shortKey = keyString.substring(PREFIX.length());
         activeSounds.put(te, new ActiveSound(loop, shortKey, newToken));
         mc.getSoundHandler().playSound(loop);
@@ -186,7 +205,7 @@ public class GTSoundTickHandler {
         activeSounds.entrySet().removeIf(entry -> {
             TileEntity te = entry.getKey();
             TileEntity worldTE = te.getWorldObj().getTileEntity(te.xCoord, te.yCoord, te.zCoord);
-            if (te.isInvalid() || te.getWorldObj() == null || worldTE != te) {
+            if (te.isInvalid() || te.getWorldObj() == null || worldTE != te || entry.getValue().loop.isDonePlaying()) {
                 mc.getSoundHandler().stopSound(entry.getValue().loop);
                 teSoundTokens.put(te, teSoundTokens.getOrDefault(te, 0) + 1);
                 return true;
@@ -240,6 +259,16 @@ public class GTSoundTickHandler {
         if (mName.equals("MultiTileEntityGearBox")) {
             int mRotationData = ((MultiTileEntityGearBox) (TileEntity)te).mRotationData;
             mState = (byte) (mRotationData & B[6]) != 0 ? 1 : 0;
+        }
+
+        if (mName.equals("MultiTileEntityBoilerTank")) {
+            MultiTileEntityBoilerTank be = (MultiTileEntityBoilerTank) (TileEntity) te;
+            try{
+                Field barometer = MultiTileEntityBoilerTank.class.getDeclaredField("mBarometer");
+                barometer.setAccessible(true);
+                Object getBarometer = barometer.get(be);
+                mState = (int) getBarometer;
+            } catch (Throwable ignored){}
         }
 
         if (mName.equals("MultiTileEntitySmeltery")) {
