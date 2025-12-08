@@ -54,5 +54,7 @@
   "gt.sluice_idle": {"category":"ambient", "sounds":[{"name": "sluice_idle", "stream":false}]},
   "gt.sluice_processing": {"category":"ambient", "sounds":[{"name": "sluice_processing", "stream":false}]},
   "gt.steam_turbine_stall": {"category":"ambient", "sounds":[{"name": "steam_turbine_stall", "stream":false}]},
-  "gt.steam_turbine_running": {"category":"ambient", "sounds":[{"name": "steam_turbine_running", "stream":false}]}
+  "gt.steam_turbine_running": {"category":"ambient", "sounds":[{"name": "steam_turbine_running", "stream":false}]},
+  "gt.crusher_idle": {"category":"ambient", "sounds":[{"name": "crusher_idle", "stream":false}]},
+  "gt.crusher_processing": {"category":"ambient", "sounds":[{"name": "crusher_processing", "stream":false}]}
 }

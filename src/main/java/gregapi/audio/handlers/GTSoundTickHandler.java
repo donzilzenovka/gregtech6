@@ -83,7 +83,7 @@ public class GTSoundTickHandler {
                 "boiler_25", "boiler_26", "boiler_27", "boiler_28", "boiler_29", "boiler_30", "boiler_31"});
         SOUND_MAP.put("sluice", new String[] {null, null, "sluice_idle", "sluice_processing"});
         
-        SOUND_MAP.put("crusher", new String[] {null, "crusher_idle", null, null});
+        SOUND_MAP.put("crusher", new String[] {null, null, "crusher_idle", "crusher_processing"});
         SOUND_MAP.put("MultiTileEntityEngineSteam", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityGeneratorHotFluid", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityPump", new String[] {null, null, "sluice_idle", "sluice_processing"});
@@ -100,8 +100,8 @@ public class GTSoundTickHandler {
     "MultiTileEntitySafeMechanical", "MultiTileEntityBottleCrate", "MultiTileEntityAdvancedCraftingTable", "MultiTileEntityDrawerQuad",
     "MultiTileEntityAnvil", "MultiTileEntityGrindStone", "MultiTileEntityBathingPotTable", "MultiTileEntityMassStorageStandard",
     "MultiTileEntityBookShelf", "MultiTileEntityCrank", "MultiTileEntitySafeKeyLocked", "MultiTileEntityPipeItem", "shredder",
-            "MultiTileEntityHopper", "MultiTileEntityTank3x3x3Metal", "drying", "MultiTileEntityBoilerTank", "sluice",
-            "MultiTileEntityTurbineSteam"};
+    "MultiTileEntityHopper", "MultiTileEntityTank3x3x3Metal", "drying", "MultiTileEntityBoilerTank", "sluice",
+    "MultiTileEntityGeneratorHotFluid", "MultiTileEntityTurbineSteam", "crusher"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -269,6 +269,10 @@ public class GTSoundTickHandler {
                 Object getBarometer = barometer.get(be);
                 mState = (int) getBarometer;
             } catch (Throwable ignored){}
+        }
+
+        if (mName.equals("MultiTileEntityEngineSteam")) {
+            mState = mState & 0x1F;
         }
 
         if (mName.equals("MultiTileEntitySmeltery")) {
