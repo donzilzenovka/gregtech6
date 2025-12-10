@@ -6,6 +6,7 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import gregapi.audio.SoundLoop;
 import gregapi.tileentity.machines.MultiTileEntityBasicMachine;
 import gregtech.tileentity.energy.converters.MultiTileEntityBoilerTank;
+import gregtech.tileentity.energy.converters.MultiTileEntityEngineSteam;
 import gregtech.tileentity.energy.transformers.MultiTileEntityGearBox;
 import gregtech.tileentity.tools.MultiTileEntitySmeltery;
 import net.minecraft.client.Minecraft;
@@ -84,9 +85,11 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("sluice", new String[] {null, null, "sluice_idle", "sluice_processing"});
         
         SOUND_MAP.put("crusher", new String[] {null, null, "crusher_idle", "crusher_processing"});
-        SOUND_MAP.put("MultiTileEntityEngineSteam", new String[] {null, null, null, null});
-        SOUND_MAP.put("MultiTileEntityGeneratorHotFluid", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityEngineSteam", new String[] {null, "steam_engine_active", null, null});
+        SOUND_MAP.put("MultiTileEntityGeneratorHotFluid", new String[] {null, "heat_exchanger_active", "heat_exchanger_active", null});
         SOUND_MAP.put("MultiTileEntityPump", new String[] {null, null, "sluice_idle", "sluice_processing"});
+        SOUND_MAP.put("MultiTileEntityAutoToolHammer", new String[] {null, null, null, null});
+        SOUND_MAP.put("compressor", new String[] {null, null, "compressor_idle", "compressor_processing"});
 
 
 
@@ -101,7 +104,8 @@ public class GTSoundTickHandler {
     "MultiTileEntityAnvil", "MultiTileEntityGrindStone", "MultiTileEntityBathingPotTable", "MultiTileEntityMassStorageStandard",
     "MultiTileEntityBookShelf", "MultiTileEntityCrank", "MultiTileEntitySafeKeyLocked", "MultiTileEntityPipeItem", "shredder",
     "MultiTileEntityHopper", "MultiTileEntityTank3x3x3Metal", "drying", "MultiTileEntityBoilerTank", "sluice",
-    "MultiTileEntityGeneratorHotFluid", "MultiTileEntityTurbineSteam", "crusher"};
+    "MultiTileEntityGeneratorHotFluid", "MultiTileEntityTurbineSteam", "crusher", "MultiTileEntityEngineSteam",
+    "MultiTileEntityAutoToolHammer"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -272,7 +276,16 @@ public class GTSoundTickHandler {
         }
 
         if (mName.equals("MultiTileEntityEngineSteam")) {
-            mState = mState & 0x1F;
+            //mState = mState & 0x1F;
+
+            MultiTileEntityEngineSteam es = (MultiTileEntityEngineSteam) (TileEntity) te;
+            try {
+                Field active = MultiTileEntityEngineSteam.class.getDeclaredField("mActive");
+                active.setAccessible(true);
+                Object getStopped = active.get(es);
+                //System.out.println(getStopped.toString());
+                mState = (boolean)getStopped ? 1 : 0;
+            } catch (Throwable ignored){}
         }
 
         if (mName.equals("MultiTileEntitySmeltery")) {
