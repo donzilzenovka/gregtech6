@@ -60,5 +60,7 @@
   "gt.steam_engine_active": {"category":"ambient", "sounds":[{"name": "steam_engine_active", "stream":false}]},
   "gt.heat_exchanger_active": {"category":"ambient", "sounds":[{"name": "heat_exchanger_active", "stream":false}]},
   "gt.compressor_idle": {"category":"ambient", "sounds":[{"name": "compressor_idle", "stream":false}]},
-  "gt.compressor_processing": {"category":"ambient", "sounds":[{"name": "compressor_processing", "stream":false}]}
+  "gt.compressor_processing": {"category":"ambient", "sounds":[{"name": "compressor_processing", "stream":false}]},
+  "gt.cutter_idle": {"category":"ambient", "sounds":[{"name": "cutter_idle", "stream":false}]},
+  "gt.cutter_processing": {"category":"ambient", "sounds":[{"name": "cutter_processing", "stream":false}]}
 }

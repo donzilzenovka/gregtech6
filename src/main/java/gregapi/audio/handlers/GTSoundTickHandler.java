@@ -7,6 +7,7 @@ import gregapi.audio.SoundLoop;
 import gregapi.tileentity.machines.MultiTileEntityBasicMachine;
 import gregtech.tileentity.energy.converters.MultiTileEntityBoilerTank;
 import gregtech.tileentity.energy.converters.MultiTileEntityEngineSteam;
+import gregtech.tileentity.energy.reactors.MultiTileEntityReactorCore;
 import gregtech.tileentity.energy.transformers.MultiTileEntityGearBox;
 import gregtech.tileentity.tools.MultiTileEntitySmeltery;
 import net.minecraft.client.Minecraft;
@@ -90,6 +91,10 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("MultiTileEntityPump", new String[] {null, null, "sluice_idle", "sluice_processing"});
         SOUND_MAP.put("MultiTileEntityAutoToolHammer", new String[] {null, null, null, null});
         SOUND_MAP.put("compressor", new String[] {null, null, "compressor_idle", "compressor_processing"});
+        SOUND_MAP.put("cutter", new String[] {null, null, "cutter_idle", "cutter_processing"});
+        SOUND_MAP.put("MultiTileEntityLocker", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityReactorCore2x2", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityGeigerCounter", new String[] {null, null, null, null});
 
 
 
@@ -105,7 +110,7 @@ public class GTSoundTickHandler {
     "MultiTileEntityBookShelf", "MultiTileEntityCrank", "MultiTileEntitySafeKeyLocked", "MultiTileEntityPipeItem", "shredder",
     "MultiTileEntityHopper", "MultiTileEntityTank3x3x3Metal", "drying", "MultiTileEntityBoilerTank", "sluice",
     "MultiTileEntityGeneratorHotFluid", "MultiTileEntityTurbineSteam", "crusher", "MultiTileEntityEngineSteam",
-    "MultiTileEntityAutoToolHammer"};
+    "MultiTileEntityAutoToolHammer", "compressor", "MultiTileEntityLocker", "MultiTileEntityGeigerCounter", "cutter"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -276,15 +281,22 @@ public class GTSoundTickHandler {
         }
 
         if (mName.equals("MultiTileEntityEngineSteam")) {
-            //mState = mState & 0x1F;
-
             MultiTileEntityEngineSteam es = (MultiTileEntityEngineSteam) (TileEntity) te;
             try {
                 Field active = MultiTileEntityEngineSteam.class.getDeclaredField("mActive");
                 active.setAccessible(true);
                 Object getStopped = active.get(es);
-                //System.out.println(getStopped.toString());
                 mState = (boolean)getStopped ? 1 : 0;
+            } catch (Throwable ignored){}
+        }
+
+        if (mName.equals("MultiTileEntityReactorCore2x2")) {
+            MultiTileEntityReactorCore es = (MultiTileEntityReactorCore) (TileEntity) te;
+            try {
+                Field active = MultiTileEntityReactorCore.class.getDeclaredField("mStopped");
+                active.setAccessible(true);
+                Object getStopped = active.get(es);
+                mState = (boolean)getStopped ? 0 : 1;
             } catch (Throwable ignored){}
         }
 
