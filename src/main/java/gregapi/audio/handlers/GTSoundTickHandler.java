@@ -95,10 +95,11 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("MultiTileEntityLocker", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityReactorCore2x2", new String[] {null, "reactor_active", null, null});
         SOUND_MAP.put("MultiTileEntityGeigerCounter", new String[] {null, null, null, null});
-        SOUND_MAP.put("rollbender", new String[] {null, null, "rolling_bender_idle", "rolling_bender_processing"});
         SOUND_MAP.put("lathe", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityTransformerRotation", new String[] {null, "transform_gearbox_active", null, null});
         SOUND_MAP.put("rollingmill", new String[] {null, null, "rolling_mill_idle", "rolling_mill_processing"});
+        SOUND_MAP.put("rollformer", new String[] {null, null, "rolling_mill_idle", "rolling_mill_processing"});
+        SOUND_MAP.put("rollbender", new String[] {null, null, "rolling_bender_idle", "rolling_bender_processing"});
         SOUND_MAP.put("lathe", new String[] {null, null, "lathe_idle", "lathe_processing"});
         SOUND_MAP.put("MultiTileEntityPump", new String[] {null, "pump_active", "pump_stall", null});
         SOUND_MAP.put("wiremill", new String[] {null, null, "wiremill_idle", "wiremill_processing"});
@@ -107,6 +108,9 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("sharpener", new String[] {null, null, "sharpener_idle", "sharpener_processing"});
         SOUND_MAP.put("burnmixer", new String[] {null, null, "burnmixer_idle", "burnmixer_processing"});
         SOUND_MAP.put("pressurewasher", new String[] {null, null, "pressurewasher_idle", "pressurewasher_processing"});
+        SOUND_MAP.put("MultiTileEntityEngineRotation", new String[] {null, "rotation_engine_active", "rotation_engine_stall", null});
+        SOUND_MAP.put("press", new String[] {null, null, "press_idle", "press_processing"});
+
 
 
 
@@ -124,7 +128,7 @@ public class GTSoundTickHandler {
     "MultiTileEntityGeneratorHotFluid", "MultiTileEntityTurbineSteam", "crusher", "MultiTileEntityEngineSteam",
     "MultiTileEntityAutoToolHammer", "compressor", "MultiTileEntityLocker", "MultiTileEntityGeigerCounter", "cutter", "lathe",
     "MultiTileEntityReactorCore2x2", "rollingmill", "MultiTileEntityPump", "MultiTileEntityTransformerRotation", "rollbender",
-    "mixer", "loom", "sharpener", "burnmixer"};
+    "mixer", "loom", "sharpener", "burnmixer", "pressurewasher", "rollformer", "press"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {

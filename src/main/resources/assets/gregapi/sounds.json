@@ -84,5 +84,9 @@
   "gt.burnmixer_idle": {"category":"ambient", "sounds":[{"name": "burnmixer_idle", "stream":false}]},
   "gt.burnmixer_processing": {"category":"ambient", "sounds":[{"name": "burnmixer_processing", "stream":false}]},
   "gt.pressurewasher_idle": {"category":"ambient", "sounds":[{"name": "pressurewasher_idle", "stream":false}]},
-  "gt.pressurewasher_processing": {"category":"ambient", "sounds":[{"name": "pressurewasher_processing", "stream":false}]}
+  "gt.pressurewasher_processing": {"category":"ambient", "sounds":[{"name": "pressurewasher_processing", "stream":false}]},
+  "gt.rotation_engine_active": {"category":"ambient", "sounds":[{"name": "rotation_engine_active", "stream":false}]},
+  "gt.rotation_engine_stall": {"category":"ambient", "sounds":[{"name": "rotation_engine_stall", "stream":false}]},
+  "gt.press_idle": {"category":"ambient", "sounds":[{"name": "press_idle", "stream":false}]},
+  "gt.press_processing": {"category":"ambient", "sounds":[{"name": "press_processing", "stream":false}]}
 }
