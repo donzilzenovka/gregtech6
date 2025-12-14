@@ -110,6 +110,9 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("pressurewasher", new String[] {null, null, "pressurewasher_idle", "pressurewasher_processing"});
         SOUND_MAP.put("MultiTileEntityEngineRotation", new String[] {null, "rotation_engine_active", "rotation_engine_stall", null});
         SOUND_MAP.put("press", new String[] {null, null, "press_idle", "press_processing"});
+        SOUND_MAP.put("squeezer", new String[] {null, null, "squeezer_idle", "squeezer_processing"});
+        SOUND_MAP.put("clustermill", new String[] {null, null, "clustermill_idle", "clustermill_processing"});
+        SOUND_MAP.put("mc.recipe.furnace", new String[] {null, null, "clustermill_idle", "clustermill_processing"});
 
 
 
@@ -128,7 +131,7 @@ public class GTSoundTickHandler {
     "MultiTileEntityGeneratorHotFluid", "MultiTileEntityTurbineSteam", "crusher", "MultiTileEntityEngineSteam",
     "MultiTileEntityAutoToolHammer", "compressor", "MultiTileEntityLocker", "MultiTileEntityGeigerCounter", "cutter", "lathe",
     "MultiTileEntityReactorCore2x2", "rollingmill", "MultiTileEntityPump", "MultiTileEntityTransformerRotation", "rollbender",
-    "mixer", "loom", "sharpener", "burnmixer", "pressurewasher", "rollformer", "press"};
+    "mixer", "loom", "sharpener", "burnmixer", "pressurewasher", "rollformer", "press", "squeezer", "MultiTileEntityEngineRotation"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {

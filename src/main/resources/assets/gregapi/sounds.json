@@ -88,5 +88,9 @@
   "gt.rotation_engine_active": {"category":"ambient", "sounds":[{"name": "rotation_engine_active", "stream":false}]},
   "gt.rotation_engine_stall": {"category":"ambient", "sounds":[{"name": "rotation_engine_stall", "stream":false}]},
   "gt.press_idle": {"category":"ambient", "sounds":[{"name": "press_idle", "stream":false}]},
-  "gt.press_processing": {"category":"ambient", "sounds":[{"name": "press_processing", "stream":false}]}
+  "gt.press_processing": {"category":"ambient", "sounds":[{"name": "press_processing", "stream":false}]},
+  "gt.squeezer_idle": {"category":"ambient", "sounds":[{"name": "squeezer_idle", "stream":false}]},
+  "gt.squeezer_processing": {"category":"ambient", "sounds":[{"name": "squeezer_processing", "stream":false}]},
+  "gt.clustermill_idle": {"category":"ambient", "sounds":[{"name": "clustermill_idle", "stream":false}]},
+  "gt.clustermill_processing": {"category":"ambient", "sounds":[{"name": "clustermill_processing", "stream":false}]}
 }
