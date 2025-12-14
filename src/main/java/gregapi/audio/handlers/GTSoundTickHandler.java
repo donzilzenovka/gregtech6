@@ -9,6 +9,7 @@ import gregtech.tileentity.energy.converters.MultiTileEntityBoilerTank;
 import gregtech.tileentity.energy.converters.MultiTileEntityEngineSteam;
 import gregtech.tileentity.energy.reactors.MultiTileEntityReactorCore;
 import gregtech.tileentity.energy.transformers.MultiTileEntityGearBox;
+import gregtech.tileentity.energy.transformers.MultiTileEntityTransformerRotation;
 import gregtech.tileentity.tools.MultiTileEntitySmeltery;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
@@ -88,13 +89,24 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("crusher", new String[] {null, null, "crusher_idle", "crusher_processing"});
         SOUND_MAP.put("MultiTileEntityEngineSteam", new String[] {null, "steam_engine_active", null, null});
         SOUND_MAP.put("MultiTileEntityGeneratorHotFluid", new String[] {null, "heat_exchanger_active", "heat_exchanger_active", null});
-        SOUND_MAP.put("MultiTileEntityPump", new String[] {null, null, "sluice_idle", "sluice_processing"});
         SOUND_MAP.put("MultiTileEntityAutoToolHammer", new String[] {null, null, null, null});
         SOUND_MAP.put("compressor", new String[] {null, null, "compressor_idle", "compressor_processing"});
         SOUND_MAP.put("cutter", new String[] {null, null, "cutter_idle", "cutter_processing"});
         SOUND_MAP.put("MultiTileEntityLocker", new String[] {null, null, null, null});
-        SOUND_MAP.put("MultiTileEntityReactorCore2x2", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityReactorCore2x2", new String[] {null, "reactor_active", null, null});
         SOUND_MAP.put("MultiTileEntityGeigerCounter", new String[] {null, null, null, null});
+        SOUND_MAP.put("rollbender", new String[] {null, null, "rolling_bender_idle", "rolling_bender_processing"});
+        SOUND_MAP.put("lathe", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityTransformerRotation", new String[] {null, "transform_gearbox_active", null, null});
+        SOUND_MAP.put("rollingmill", new String[] {null, null, "rolling_mill_idle", "rolling_mill_processing"});
+        SOUND_MAP.put("lathe", new String[] {null, null, "lathe_idle", "lathe_processing"});
+        SOUND_MAP.put("MultiTileEntityPump", new String[] {null, "pump_active", "pump_stall", null});
+        SOUND_MAP.put("wiremill", new String[] {null, null, "wiremill_idle", "wiremill_processing"});
+        SOUND_MAP.put("mixer", new String[] {null, null, "mixer_idle", "mixer_processing"});
+        SOUND_MAP.put("loom", new String[] {null, null, "loom_idle", "loom_processing"});
+        SOUND_MAP.put("sharpener", new String[] {null, null, "sharpener_idle", "sharpener_processing"});
+        SOUND_MAP.put("burnmixer", new String[] {null, null, "burnmixer_idle", "burnmixer_processing"});
+        SOUND_MAP.put("pressurewasher", new String[] {null, null, "pressurewasher_idle", "pressurewasher_processing"});
 
 
 
@@ -110,7 +122,9 @@ public class GTSoundTickHandler {
     "MultiTileEntityBookShelf", "MultiTileEntityCrank", "MultiTileEntitySafeKeyLocked", "MultiTileEntityPipeItem", "shredder",
     "MultiTileEntityHopper", "MultiTileEntityTank3x3x3Metal", "drying", "MultiTileEntityBoilerTank", "sluice",
     "MultiTileEntityGeneratorHotFluid", "MultiTileEntityTurbineSteam", "crusher", "MultiTileEntityEngineSteam",
-    "MultiTileEntityAutoToolHammer", "compressor", "MultiTileEntityLocker", "MultiTileEntityGeigerCounter", "cutter"};
+    "MultiTileEntityAutoToolHammer", "compressor", "MultiTileEntityLocker", "MultiTileEntityGeigerCounter", "cutter", "lathe",
+    "MultiTileEntityReactorCore2x2", "rollingmill", "MultiTileEntityPump", "MultiTileEntityTransformerRotation", "rollbender",
+    "mixer", "loom", "sharpener", "burnmixer"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -288,6 +302,11 @@ public class GTSoundTickHandler {
                 Object getStopped = active.get(es);
                 mState = (boolean)getStopped ? 1 : 0;
             } catch (Throwable ignored){}
+        }
+
+        if (mName.equals("MultiTileEntityTransformerRotation")) {
+            MultiTileEntityTransformerRotation gb = (MultiTileEntityTransformerRotation) (TileEntity) te;
+            mState = gb.mActivity.mState == 1 ? 1 : 0;
         }
 
         if (mName.equals("MultiTileEntityReactorCore2x2")) {
