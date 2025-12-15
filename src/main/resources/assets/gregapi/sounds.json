@@ -13,6 +13,7 @@
   "gt.spin_processing": {"category":"ambient", "sounds":[{"name": "spin_processing", "stream":false}]},
   "gt.gear_turn": {"category":"ambient", "sounds":[{"name": "gear_turn", "stream":false}]},
   "gt.burning_gas": {"category":"ambient", "sounds":[{"name": "burning_gas", "stream":false}]},
+  "gt.burning_fluidized": {"category":"ambient", "sounds":[{"name": "burning_fluidized", "stream":false}]},
   "gt.bath_processing": {"category":"ambient", "sounds":[{"name": "bath_processing", "stream":false}]},
   "gt.stress_crack": {"category":"ambient", "sounds":[{"name": "stress_crack", "stream":false}]},
   "gt.distill_idle": {"category":"ambient", "sounds":[{"name": "distill_idle", "stream":false}]},
@@ -92,5 +93,10 @@
   "gt.squeezer_idle": {"category":"ambient", "sounds":[{"name": "squeezer_idle", "stream":false}]},
   "gt.squeezer_processing": {"category":"ambient", "sounds":[{"name": "squeezer_processing", "stream":false}]},
   "gt.clustermill_idle": {"category":"ambient", "sounds":[{"name": "clustermill_idle", "stream":false}]},
-  "gt.clustermill_processing": {"category":"ambient", "sounds":[{"name": "clustermill_processing", "stream":false}]}
+  "gt.clustermill_processing": {"category":"ambient", "sounds":[{"name": "clustermill_processing", "stream":false}]},
+  "gt.oven_idle": {"category":"ambient", "sounds":[{"name": "oven_idle", "stream":false}]},
+  "gt.oven_processing": {"category":"ambient", "sounds":[{"name": "oven_processing", "stream":false}]},
+  "gt.smelter_processing": {"category":"ambient", "sounds":[{"name": "smelter_processing", "stream":false}]},
+  "gt.sifter_idle": {"category":"ambient", "sounds":[{"name": "sifter_idle", "stream":false}]},
+  "gt.sifter_processing": {"category":"ambient", "sounds":[{"name": "sifter_processing", "stream":false}]}
 }
