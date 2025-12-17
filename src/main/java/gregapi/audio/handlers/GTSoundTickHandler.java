@@ -135,7 +135,7 @@ public class GTSoundTickHandler {
     "MultiTileEntityAutoToolHammer", "compressor", "MultiTileEntityLocker", "MultiTileEntityGeigerCounter", "cutter", "lathe",
     "MultiTileEntityReactorCore2x2", "rollingmill", "MultiTileEntityPump", "MultiTileEntityTransformerRotation", "rollbender",
     "mixer", "loom", "sharpener", "burnmixer", "pressurewasher", "rollformer", "press", "squeezer", "MultiTileEntityEngineRotation",
-    "MultiTileEntityGeneratorBrick", "mc.recipe.furnace", "MultiTileEntityGeneratorFluidBed"};
+    "MultiTileEntityGeneratorBrick", "mc.recipe.furnace", "MultiTileEntityGeneratorFluidBed", "sifter"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
