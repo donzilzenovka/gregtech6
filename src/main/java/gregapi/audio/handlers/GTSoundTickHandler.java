@@ -116,6 +116,15 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("melter", new String[] {null, null, "oven_idle", "smelter_processing"});
         SOUND_MAP.put("MultiTileEntityGeneratorFluidBed", new String[] {null, "burning_fluidized", null, null});
         SOUND_MAP.put("sifter", new String[] {null, null, "sifter_idle", "sifter_processing"});
+        SOUND_MAP.put("roaster", new String[] {null, null, "oven_idle", "oven_processing"});
+
+        SOUND_MAP.put("MultiTileEntityDynamoElectric", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryBox", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityMagnetElectric", new String[] {null, null, null, null});
+        SOUND_MAP.put("polarizer", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryEU128", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryAdvEU512", new String[] {null, null, null, null});
+
 
 
 
@@ -135,7 +144,7 @@ public class GTSoundTickHandler {
     "MultiTileEntityAutoToolHammer", "compressor", "MultiTileEntityLocker", "MultiTileEntityGeigerCounter", "cutter", "lathe",
     "MultiTileEntityReactorCore2x2", "rollingmill", "MultiTileEntityPump", "MultiTileEntityTransformerRotation", "rollbender",
     "mixer", "loom", "sharpener", "burnmixer", "pressurewasher", "rollformer", "press", "squeezer", "MultiTileEntityEngineRotation",
-    "MultiTileEntityGeneratorBrick", "mc.recipe.furnace", "MultiTileEntityGeneratorFluidBed", "sifter"};
+    "MultiTileEntityGeneratorBrick", "mc.recipe.furnace", "MultiTileEntityGeneratorFluidBed", "sifter", "roaster"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
