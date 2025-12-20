@@ -13,6 +13,7 @@ import gregtech.tileentity.energy.transformers.MultiTileEntityTransformerRotatio
 import gregtech.tileentity.tools.MultiTileEntitySmeltery;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -118,12 +119,17 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("sifter", new String[] {null, null, "sifter_idle", "sifter_processing"});
         SOUND_MAP.put("roaster", new String[] {null, null, "oven_idle", "oven_processing"});
 
-        SOUND_MAP.put("MultiTileEntityDynamoElectric", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityDynamoElectric", new String[] {null, "dynamo_active", "dynamo_stall", null});
         SOUND_MAP.put("MultiTileEntityBatteryBox", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityMagnetElectric", new String[] {null, null, null, null});
         SOUND_MAP.put("polarizer", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityBatteryEU128", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityBatteryAdvEU512", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryAdvEU128", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityTransformerElectric", new String[] {null, "transformer_active", "transformer_stall", null});
+        SOUND_MAP.put("MultiTileEntityBatteryEU512", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityWireElectric", new String[] {null, null, null, null});
+        SOUND_MAP.put("electrolyzer", new String[] {null, null, "electrolyzer_idle", "electrolyzer_processing"});
 
 
 
@@ -144,7 +150,9 @@ public class GTSoundTickHandler {
     "MultiTileEntityAutoToolHammer", "compressor", "MultiTileEntityLocker", "MultiTileEntityGeigerCounter", "cutter", "lathe",
     "MultiTileEntityReactorCore2x2", "rollingmill", "MultiTileEntityPump", "MultiTileEntityTransformerRotation", "rollbender",
     "mixer", "loom", "sharpener", "burnmixer", "pressurewasher", "rollformer", "press", "squeezer", "MultiTileEntityEngineRotation",
-    "MultiTileEntityGeneratorBrick", "mc.recipe.furnace", "MultiTileEntityGeneratorFluidBed", "sifter", "roaster"};
+    "MultiTileEntityGeneratorBrick", "mc.recipe.furnace", "MultiTileEntityGeneratorFluidBed", "sifter", "roaster", "MultiTileEntityDynamoElectric",
+    "MultiTileEntityBatteryEU512", "MultiTileEntityBatteryAdvEU128", "MultiTileEntityWireElectric", "MultiTileEntityTransformerElectric",
+    "MultiTileEntityBatteryEU128", "MultiTileEntityBatteryBox", "electrolyzer"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -160,7 +168,7 @@ public class GTSoundTickHandler {
             boolean isOutOfRange = (dx * dx + dy * dy + dz * dz > 256);
 
             String mName = te.getClass().getSimpleName();
-            if (mName.equals("MultiTileEntityBasicMachine")) {
+            if (mName.equals("MultiTileEntityBasicMachine") || mName.equals(("MultiTileEntityBasicMachineElectric"))) {
                 mName = ((MultiTileEntityBasicMachine) (TileEntity)te).mRecipes.toString().replace("gt.recipe.", "");
             }
             String desiredKey = null;
@@ -276,7 +284,7 @@ public class GTSoundTickHandler {
         }
     }
 
-    public static int getTileEntityState(TileEntity te) {
+    public static int getTileEntityState(@NotNull TileEntity te) {
         int mState = -1;
         String mName = te.getClass().getSimpleName();
 
@@ -295,9 +303,19 @@ public class GTSoundTickHandler {
             } catch (Throwable ignored) {}
         }
 
-        if (mName.equals("MultiTileEntityBasicMachine")) {
+        /*
+        if (mName.equals("MultiTileEntityBasicMachine") ) {
             mName = ((MultiTileEntityBasicMachine) (TileEntity)te).mRecipes.toString().replace("gt.recipe.", "");
         }
+
+        if (mName.equals("MultiTileEntityBasicMachineElectric") ) {
+            MultiTileEntityBasicMachine me = (MultiTileEntityBasicMachine) (TileEntity) te;
+            String electricMachineName = me.mRecipes.toString().replace("gt.recipe.", "");
+            System.out.println(electricMachineName);
+            mName = electricMachineName;
+        }
+
+         */
 
         if (mName.equals("MultiTileEntityGearBox")) {
             int mRotationData = ((MultiTileEntityGearBox) (TileEntity)te).mRotationData;

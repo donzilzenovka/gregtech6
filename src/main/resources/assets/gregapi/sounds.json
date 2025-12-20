@@ -98,5 +98,11 @@
   "gt.oven_processing": {"category":"ambient", "sounds":[{"name": "oven_processing", "stream":false}]},
   "gt.smelter_processing": {"category":"ambient", "sounds":[{"name": "smelter_processing", "stream":false}]},
   "gt.sifter_idle": {"category":"ambient", "sounds":[{"name": "sifter_idle", "stream":false}]},
-  "gt.sifter_processing": {"category":"ambient", "sounds":[{"name": "sifter_processing", "stream":false}]}
+  "gt.sifter_processing": {"category":"ambient", "sounds":[{"name": "sifter_processing", "stream":false}]},
+  "gt.dynamo_active": {"category":"ambient", "sounds":[{"name": "dynamo_active", "stream":false}]},
+  "gt.dynamo_stall": {"category":"ambient", "sounds":[{"name": "dynamo_stall", "stream":false}]},
+  "gt.transformer_active": {"category":"ambient", "sounds":[{"name": "transformer_active", "stream":false}]},
+  "gt.transformer_stall": {"category":"ambient", "sounds":[{"name": "transformer_stall", "stream":false}]},
+  "gt.electrolyzer_idle": {"category":"ambient", "sounds":[{"name": "electrolyzer_idle", "stream":false}]},
+  "gt.electrolyzer_processing": {"category":"ambient", "sounds":[{"name": "electrolyzer_processing", "stream":false}]}
 }
