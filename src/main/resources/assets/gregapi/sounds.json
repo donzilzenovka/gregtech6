@@ -104,5 +104,9 @@
   "gt.transformer_active": {"category":"ambient", "sounds":[{"name": "transformer_active", "stream":false}]},
   "gt.transformer_stall": {"category":"ambient", "sounds":[{"name": "transformer_stall", "stream":false}]},
   "gt.electrolyzer_idle": {"category":"ambient", "sounds":[{"name": "electrolyzer_idle", "stream":false}]},
-  "gt.electrolyzer_processing": {"category":"ambient", "sounds":[{"name": "electrolyzer_processing", "stream":false}]}
+  "gt.electrolyzer_processing": {"category":"ambient", "sounds":[{"name": "electrolyzer_processing", "stream":false}]},
+  "gt.polarizer_idle": {"category":"ambient", "sounds":[{"name": "polarizer_idle", "stream":false}]},
+  "gt.polarizer_processing": {"category":"ambient", "sounds":[{"name": "polarizer_processing", "stream":false}]},
+  "gt.magnetizer_active": {"category":"ambient", "sounds":[{"name": "magnetizer_active", "stream":false}]},
+  "gt.magnetizer_stall": {"category":"ambient", "sounds":[{"name": "magnetizer_stall", "stream":false}]}
 }
