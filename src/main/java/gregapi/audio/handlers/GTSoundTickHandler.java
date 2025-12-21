@@ -130,6 +130,7 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("MultiTileEntityBatteryEU512", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityWireElectric", new String[] {null, null, null, null});
         SOUND_MAP.put("electrolyzer", new String[] {null, null, "electrolyzer_idle", "electrolyzer_processing"});
+        SOUND_MAP.put("magneticseparator", new String[] {null, null, "polarizer_idle", "polarizer_processing"});
 
 
 
@@ -152,7 +153,8 @@ public class GTSoundTickHandler {
     "mixer", "loom", "sharpener", "burnmixer", "pressurewasher", "rollformer", "press", "squeezer", "MultiTileEntityEngineRotation",
     "MultiTileEntityGeneratorBrick", "mc.recipe.furnace", "MultiTileEntityGeneratorFluidBed", "sifter", "roaster", "MultiTileEntityDynamoElectric",
     "MultiTileEntityBatteryEU512", "MultiTileEntityBatteryAdvEU128", "MultiTileEntityWireElectric", "MultiTileEntityTransformerElectric",
-    "MultiTileEntityBatteryEU128", "MultiTileEntityBatteryBox", "electrolyzer", "polarizer", "MultiTileEntityMagnetElectric"};
+    "MultiTileEntityBatteryEU128", "MultiTileEntityBatteryBox", "electrolyzer", "polarizer", "MultiTileEntityMagnetElectric",
+    "magneticseparator"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
