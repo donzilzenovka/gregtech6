@@ -108,5 +108,7 @@
   "gt.polarizer_idle": {"category":"ambient", "sounds":[{"name": "polarizer_idle", "stream":false}]},
   "gt.polarizer_processing": {"category":"ambient", "sounds":[{"name": "polarizer_processing", "stream":false}]},
   "gt.magnetizer_active": {"category":"ambient", "sounds":[{"name": "magnetizer_active", "stream":false}]},
-  "gt.magnetizer_stall": {"category":"ambient", "sounds":[{"name": "magnetizer_stall", "stream":false}]}
+  "gt.magnetizer_stall": {"category":"ambient", "sounds":[{"name": "magnetizer_stall", "stream":false}]},
+  "gt.large_crusher_idle": {"category":"ambient", "sounds":[{"name": "large_crusher_idle", "stream":false}]},
+  "gt.large_crusher_processing": {"category":"ambient", "sounds":[{"name": "large_crusher_processing", "stream":false}]}
 }
