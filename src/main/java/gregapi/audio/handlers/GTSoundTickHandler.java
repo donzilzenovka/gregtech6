@@ -132,6 +132,17 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("electrolyzer", new String[] {null, null, "electrolyzer_idle", "electrolyzer_processing"});
         SOUND_MAP.put("magneticseparator", new String[] {null, null, "polarizer_idle", "polarizer_processing"});
         SOUND_MAP.put("MultiTileEntityCrusher", new String[] {null, null, "large_crusher_idle", "large_crusher_processing"});
+        SOUND_MAP.put("MultiTileEntityLargeBoiler", new String[] {
+                null, "boiler_1", "boiler_2", "boiler_3", "boiler_4", "boiler_5", "boiler_6", "boiler_7", "boiler_8",
+                "boiler_9", "boiler_10", "boiler_11", "boiler_12", "boiler_13", "boiler_14", "boiler_15", "boiler_16",
+                "boiler_17", "boiler_18", "boiler_19", "boiler_20", "boiler_21", "boiler_22", "boiler_23", "boiler_24",
+                "boiler_25", "boiler_26", "boiler_27", "boiler_28", "boiler_29", "boiler_30", "boiler_31"});
+        SOUND_MAP.put("MultiTileEntityLargeHeatExchanger", new String[] {null, "heat_exchanger_active", null, null});
+        SOUND_MAP.put("MultiTileEntityLargeTurbineSteam", new String[] {null, "steam_turbine_running", "steam_turbine_stall", null});
+        SOUND_MAP.put("MultiTileEntityLargeDynamo", new String[] {null, "dynamo_active", "dynamo_stall", null});
+        SOUND_MAP.put("MultiTileEntityBucketometer", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryBoxLarge", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityCentrifuge", new String[] {null, null, "spin_idle", "spin_processing"});
 
 
 
@@ -155,7 +166,7 @@ public class GTSoundTickHandler {
     "MultiTileEntityGeneratorBrick", "mc.recipe.furnace", "MultiTileEntityGeneratorFluidBed", "sifter", "roaster", "MultiTileEntityDynamoElectric",
     "MultiTileEntityBatteryEU512", "MultiTileEntityBatteryAdvEU128", "MultiTileEntityWireElectric", "MultiTileEntityTransformerElectric",
     "MultiTileEntityBatteryEU128", "MultiTileEntityBatteryBox", "electrolyzer", "polarizer", "MultiTileEntityMagnetElectric",
-    "magneticseparator", "MultiTileEntityCrusher"};
+    "magneticseparator", "MultiTileEntityCrusher", "MultiTileEntityBucketometer"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
