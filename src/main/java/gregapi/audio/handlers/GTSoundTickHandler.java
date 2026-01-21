@@ -148,6 +148,9 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("MultiTileEntityMotorElectric", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityHeaterElectric", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityChargingCraftingTable", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityLogisticsCore", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityMassStorageLogistics", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityWireLogistics", new String[] {null, null, null, null});
 
 
 
@@ -173,7 +176,7 @@ public class GTSoundTickHandler {
     "MultiTileEntityBatteryEU128", "MultiTileEntityBatteryBox", "electrolyzer", "polarizer", "MultiTileEntityMagnetElectric",
     "magneticseparator", "MultiTileEntityCrusher", "MultiTileEntityBucketometer","MultiTileEntityCentrifuge","MultiTileEntityBatteryBoxLarge",
     "MultiTileEntityLargeDynamo", "MultiTileEntityLargeTurbineSteam", "MultiTileEntityLargeHeatExchanger", "MultiTileEntityLargeBoiler",
-    "MultiTileEntityEnderGarbageBin", "MultiTileEntityChargingCraftingTable", "MultiTileEntityShredder"};
+    "MultiTileEntityEnderGarbageBin", "MultiTileEntityChargingCraftingTable", "MultiTileEntityShredder", "smelter"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
