@@ -151,10 +151,32 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("MultiTileEntityLogisticsCore", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityMassStorageLogistics", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityWireLogistics", new String[] {null, null, null, null});
-
-
-
-
+        SOUND_MAP.put("MultiTileEntityZPM", new String[] {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityMatterFabricator", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBumbliaryAdvanced", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityZPMDechargerQU", new String[] {null, null, null, null});
+        SOUND_MAP.put("bumblelyzer", new String[] {null, null, null, null});
+        SOUND_MAP.put("nanofab", new String[] {null, null, null, null});
+        SOUND_MAP.put("extruder", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityCrystalCharger", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryLU8192", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryLU2048", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryLU512", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryLU128", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryLU32", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryLU8", new String[] {null, null, null, null});
+        SOUND_MAP.put("scannermolecular", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityWireLaser", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityCrystalChargerLarge", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityLaserElectric", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityLaserAbsorberElectric", new String[] {null, null, null, null});
+        SOUND_MAP.put("laserengraver", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityLaserometer", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityLaserFlux", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityDynamoFlux", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityZPMDechargerEU", new String[] {null, null, null, null});
+        SOUND_MAP.put("scannervisuals", new String[] {null, null, null, null});
+        SOUND_MAP.put("scannermolecular", new String[] {null, null, null, null});
 
     }
 
