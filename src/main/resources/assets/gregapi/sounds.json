@@ -122,6 +122,11 @@
   "gt.laser_flux_active": {"category":"ambient", "sounds":[{"name": "laser_flux_active", "stream":false}]},
   "gt.laser_electric_active": {"category":"ambient", "sounds":[{"name": "laser_flux_active", "stream":false}]},
   "gt.motor_electric_active": {"category":"ambient", "sounds":[{"name": "motor_electric_active", "stream":false}]},
-  "gt.motor_electric_stall": {"category":"ambient", "sounds":[{"name": "motor_electric_stall", "stream":false}]}
+  "gt.motor_electric_stall": {"category":"ambient", "sounds":[{"name": "motor_electric_stall", "stream":false}]},
+  "gt.zpm_decharger_eu_stall": {"category":"ambient", "sounds":[{"name": "zpm_decharger_eu_stall", "stream":false}]},
+  "gt.zpm_decharger_eu_active": {"category":"ambient", "sounds":[{"name": "zpm_decharger_eu_active", "stream":false}]},
+  "gt.zpm_decharger_qu_stall": {"category":"ambient", "sounds":[{"name": "zpm_decharger_qu_stall", "stream":false}]},
+  "gt.zpm_decharger_qu_active": {"category":"ambient", "sounds":[{"name": "zpm_decharger_qu_active", "stream":false}]},
+  "gt.zpm_idle": {"category":"ambient", "sounds":[{"name": "zpm_idle", "stream":false}]}
 
 }

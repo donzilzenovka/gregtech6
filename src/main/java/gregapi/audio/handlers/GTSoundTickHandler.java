@@ -151,10 +151,11 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("MultiTileEntityLogisticsCore", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityMassStorageLogistics", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityWireLogistics", new String[] {null, null, null, null});
-        SOUND_MAP.put("MultiTileEntityZPM", new String[] {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityZPM", new String[] {  "zpm_idle", "zpm_idle", "zpm_idle", "zpm_idle", "zpm_idle",
+                                                            "zpm_idle", "zpm_idle", "zpm_idle", "zpm_idle", "zpm_idle",
+                                                            "zpm_idle", "zpm_idle", "zpm_idle", "zpm_idle", "zpm_idle"});
         SOUND_MAP.put("MultiTileEntityMatterFabricator", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityBumbliaryAdvanced", new String[] {null, null, null, null});
-        SOUND_MAP.put("MultiTileEntityZPMDechargerQU", new String[] {null, null, null, null});
         SOUND_MAP.put("bumblelyzer", new String[] {null, null, null, "bumblelyzer_processing"});
         SOUND_MAP.put("nanofab", new String[] {null, null, null, null});
         SOUND_MAP.put("extruder", new String[] {null, null, "extruder_idle", "extruder_processing"});
@@ -174,7 +175,8 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("MultiTileEntityLaserometer", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityLaserFlux", new String[] {null, "laser_flux_active", null, null});
         SOUND_MAP.put("MultiTileEntityDynamoFlux", new String[] {null, "dynamo_flux_active", "dynamo_flux_stall", null});
-        SOUND_MAP.put("MultiTileEntityZPMDechargerEU", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityZPMDechargerQU", new String[] {null, null, null, null, null, null, "zpm_decharger_qu_active"});
+        SOUND_MAP.put("MultiTileEntityZPMDechargerEU", new String[] {null, null, null, null, null, null, "zpm_decharger_eu_active"});
         SOUND_MAP.put("scannervisuals", new String[] {null, null, null, null});
         SOUND_MAP.put("scannermolecular", new String[] {null, null, "molecular_idle", "molecular_processing"});
         SOUND_MAP.put("MultiTileEntityQuantumEnergizerLaser", new String[] {null, null, null, null});
@@ -203,7 +205,8 @@ public class GTSoundTickHandler {
     "MultiTileEntityLargeDynamo", "MultiTileEntityLargeTurbineSteam", "MultiTileEntityLargeHeatExchanger", "MultiTileEntityLargeBoiler",
     "MultiTileEntityEnderGarbageBin", "MultiTileEntityChargingCraftingTable", "MultiTileEntityShredder", "smelter", "MultiTileEntityWireLaser",
     "laserengraver", "bumblelyzer", "extruder", "MultiTileEntityWireLogistics", "MultiTileEntityLaserElectric", "MultiTileEntityLaserFlux",
-    "MultiTileEntityLaserAbsorberElectric", };
+    "MultiTileEntityLaserAbsorberElectric", "MultiTileEntityMotorElectric", "MultiTileEntityZPMDechargerEU", "MultiTileEntityZPMDechargerQU",
+    "zpm_idle"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
