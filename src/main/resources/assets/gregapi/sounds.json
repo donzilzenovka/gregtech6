@@ -99,8 +99,10 @@
   "gt.smelter_processing": {"category":"ambient", "sounds":[{"name": "smelter_processing", "stream":false}]},
   "gt.sifter_idle": {"category":"ambient", "sounds":[{"name": "sifter_idle", "stream":false}]},
   "gt.sifter_processing": {"category":"ambient", "sounds":[{"name": "sifter_processing", "stream":false}]},
-  "gt.dynamo_active": {"category":"ambient", "sounds":[{"name": "dynamo_active", "stream":false}]},
-  "gt.dynamo_stall": {"category":"ambient", "sounds":[{"name": "dynamo_stall", "stream":false}]},
+  "gt.dynamo_electric_active": {"category":"ambient", "sounds":[{"name": "dynamo_electric_active", "stream":false}]},
+  "gt.dynamo_flux_active": {"category":"ambient", "sounds":[{"name": "dynamo_flux_active", "stream":false}]},
+  "gt.dynamo_flux_stall": {"category":"ambient", "sounds":[{"name": "dynamo_flux_stall", "stream":false}]},
+  "gt.dynamo_stall": {"category":"ambient", "sounds":[{"name": "dynamo_electric_stall", "stream":false}]},
   "gt.transformer_active": {"category":"ambient", "sounds":[{"name": "transformer_active", "stream":false}]},
   "gt.transformer_stall": {"category":"ambient", "sounds":[{"name": "transformer_stall", "stream":false}]},
   "gt.electrolyzer_idle": {"category":"ambient", "sounds":[{"name": "electrolyzer_idle", "stream":false}]},
@@ -110,5 +112,16 @@
   "gt.magnetizer_active": {"category":"ambient", "sounds":[{"name": "magnetizer_active", "stream":false}]},
   "gt.magnetizer_stall": {"category":"ambient", "sounds":[{"name": "magnetizer_stall", "stream":false}]},
   "gt.large_crusher_idle": {"category":"ambient", "sounds":[{"name": "large_crusher_idle", "stream":false}]},
-  "gt.large_crusher_processing": {"category":"ambient", "sounds":[{"name": "large_crusher_processing", "stream":false}]}
+  "gt.large_crusher_processing": {"category":"ambient", "sounds":[{"name": "large_crusher_processing", "stream":false}]},
+  "gt.molecular_processing": {"category":"ambient", "sounds":[{"name": "molecular_processing", "stream":false}]},
+  "gt.engraver_idle": {"category":"ambient", "sounds":[{"name": "engraver_idle", "stream":false}]},
+  "gt.engraver_processing": {"category":"ambient", "sounds":[{"name": "engraver_processing", "stream":false}]},
+  "gt.bumblelyzer_processing": {"category":"ambient", "sounds":[{"name": "bumblelyzer_processing", "stream":false}]},
+  "gt.extruder_idle": {"category":"ambient", "sounds":[{"name": "extruder_idle", "stream":false}]},
+  "gt.extruder_processing": {"category":"ambient", "sounds":[{"name": "extruder_processing", "stream":false}]},
+  "gt.laser_flux_active": {"category":"ambient", "sounds":[{"name": "laser_flux_active", "stream":false}]},
+  "gt.laser_electric_active": {"category":"ambient", "sounds":[{"name": "laser_flux_active", "stream":false}]},
+  "gt.motor_electric_active": {"category":"ambient", "sounds":[{"name": "motor_electric_active", "stream":false}]},
+  "gt.motor_electric_stall": {"category":"ambient", "sounds":[{"name": "motor_electric_stall", "stream":false}]}
+
 }
