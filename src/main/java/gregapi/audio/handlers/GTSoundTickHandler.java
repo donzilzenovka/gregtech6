@@ -157,18 +157,17 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("MultiTileEntityMatterFabricator", new String[] {null, null, null, null});
         SOUND_MAP.put("MultiTileEntityBumbliaryAdvanced", new String[] {null, null, null, null});
         SOUND_MAP.put("bumblelyzer", new String[] {null, null, null, "bumblelyzer_processing"});
-        SOUND_MAP.put("nanofab", new String[] {null, null, null, null});
+        SOUND_MAP.put("nanofab", new String[] {null, null, "nanofab_idle", "nanofab_processing"});
         SOUND_MAP.put("extruder", new String[] {null, null, "extruder_idle", "extruder_processing"});
-        SOUND_MAP.put("MultiTileEntityCrystalCharger", new String[] {null, null, null, null});
-        SOUND_MAP.put("MultiTileEntityBatteryLU8192", new String[] {null, null, null, null});
-        SOUND_MAP.put("MultiTileEntityBatteryLU2048", new String[] {null, null, null, null});
-        SOUND_MAP.put("MultiTileEntityBatteryLU512", new String[] {null, null, null, null});
-        SOUND_MAP.put("MultiTileEntityBatteryLU128", new String[] {null, null, null, null});
-        SOUND_MAP.put("MultiTileEntityBatteryLU32", new String[] {null, null, null, null});
-        SOUND_MAP.put("MultiTileEntityBatteryLU8", new String[] {null, null, null, null});
-        SOUND_MAP.put("scannermolecular", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityCrystalCharger", new String[] {null, null, null, null, null, null, "crystal_charger_active"});
+        SOUND_MAP.put("MultiTileEntityBatteryLU8192", new String[] {null, "energycrystal_idle", null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryLU2048", new String[] {null, "energycrystal_idle", null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryLU512", new String[] {null, "energycrystal_idle", null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryLU128", new String[] {null, "energycrystal_idle", null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryLU32", new String[] {null, "energycrystal_idle", null, null});
+        SOUND_MAP.put("MultiTileEntityBatteryLU8", new String[] {null, "energycrystal_idle", null, null});
         SOUND_MAP.put("MultiTileEntityWireLaser", new String[] {null, null, null, null});
-        SOUND_MAP.put("MultiTileEntityCrystalChargerLarge", new String[] {null, null, null, null});
+        SOUND_MAP.put("MultiTileEntityCrystalChargerLarge", new String[] {null, null, null, null, null, null, "crystal_charger_active"});
         SOUND_MAP.put("MultiTileEntityLaserElectric", new String[] {null, "laser_electric_active", null, null});
         SOUND_MAP.put("MultiTileEntityLaserAbsorberElectric", new String[] {null, "transformer_active", "transformer_stall", null});
         SOUND_MAP.put("laserengraver", new String[] {null, null, "engraver_idle", "engraver_processing"});
@@ -177,10 +176,12 @@ public class GTSoundTickHandler {
         SOUND_MAP.put("MultiTileEntityDynamoFlux", new String[] {null, "dynamo_flux_active", "dynamo_flux_stall", null});
         SOUND_MAP.put("MultiTileEntityZPMDechargerQU", new String[] {null, null, null, null, null, null, "zpm_decharger_qu_active"});
         SOUND_MAP.put("MultiTileEntityZPMDechargerEU", new String[] {null, null, null, null, null, null, "zpm_decharger_eu_active"});
-        SOUND_MAP.put("scannervisuals", new String[] {null, null, null, null});
+        SOUND_MAP.put("scannervisuals", new String[] {null, null, null, "scanner_processing"});
+        SOUND_MAP.put("printer", new String[] {null, null, null, "printer_processing"});
         SOUND_MAP.put("scannermolecular", new String[] {null, null, "molecular_idle", "molecular_processing"});
         SOUND_MAP.put("MultiTileEntityQuantumEnergizerLaser", new String[] {null, null, null, null});
         SOUND_MAP.put("replicator", new String[] {null, null, null, null});
+
 
 
     }
@@ -206,7 +207,7 @@ public class GTSoundTickHandler {
     "MultiTileEntityEnderGarbageBin", "MultiTileEntityChargingCraftingTable", "MultiTileEntityShredder", "smelter", "MultiTileEntityWireLaser",
     "laserengraver", "bumblelyzer", "extruder", "MultiTileEntityWireLogistics", "MultiTileEntityLaserElectric", "MultiTileEntityLaserFlux",
     "MultiTileEntityLaserAbsorberElectric", "MultiTileEntityMotorElectric", "MultiTileEntityZPMDechargerEU", "MultiTileEntityZPMDechargerQU",
-    "zpm_idle"};
+    "zpm_idle", "printer", "scannervisuals", "scannermolecular", "MultiTileEntityDynamoFlux", "nanofab"};
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {

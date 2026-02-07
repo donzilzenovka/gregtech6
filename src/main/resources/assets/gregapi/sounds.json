@@ -127,6 +127,11 @@
   "gt.zpm_decharger_eu_active": {"category":"ambient", "sounds":[{"name": "zpm_decharger_eu_active", "stream":false}]},
   "gt.zpm_decharger_qu_stall": {"category":"ambient", "sounds":[{"name": "zpm_decharger_qu_stall", "stream":false}]},
   "gt.zpm_decharger_qu_active": {"category":"ambient", "sounds":[{"name": "zpm_decharger_qu_active", "stream":false}]},
-  "gt.zpm_idle": {"category":"ambient", "sounds":[{"name": "zpm_idle", "stream":false}]}
-
+  "gt.zpm_idle": {"category":"ambient", "sounds":[{"name": "zpm_idle", "stream":false}]},
+  "gt.scanner_processing": {"category":"ambient", "sounds":[{"name": "scanner_processing", "stream":false}]},
+  "gt.printer_processing": {"category":"ambient", "sounds":[{"name": "printer_processing", "stream":false}]},
+  "gt.nanofab_idle": {"category":"ambient", "sounds":[{"name": "nanofab_idle", "stream":false}]},
+  "gt.nanofab_processing": {"category":"ambient", "sounds":[{"name": "nanofab_processing", "stream":false}]},
+  "gt.energycrystal_idle": {"category":"ambient", "sounds":[{"name": "energycrystal_idle", "stream":false}]},
+  "gt.crystal_charger_active": {"category":"ambient", "sounds":[{"name": "crystal_charger_active", "stream":false}]}
 }
